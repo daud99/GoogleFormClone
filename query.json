@@ -1,0 +1,233 @@
+mutation addQuestionaire {
+  addQuestionaire(title: "test", category: "test", owner: "5f5c7f0a1114ba2bc0fcf371") {
+    title
+  }
+}
+  
+  mutation deletQuestionaire {
+    deleteQuestionaire(title: "test") {
+      title
+    }
+  }
+  
+  
+  mutation deleteAll {
+       deleteAllQuestionaires(title: "test") {
+      deletedCount
+    }
+  }
+  
+      mutation edit {
+        editQuestionaire(id: "5f5cbf8e20a22c1bc4a3fac1") {
+          title
+        }
+  }	
+  
+  mutation edit {
+        editQuestionaire(id: "5f5cddd216e5193e0cf73cf8", owner: "5f5cd7c9e677e26261b32cf1") {
+          title,
+      id
+        }
+  }	
+  
+  query {
+    getQuestionaireByID(id: "5f5cbf8e20a22c1bc4a3fac1") {
+      title
+      owner{
+        name
+      }
+    }
+  }
+  
+  query {
+    getQuestionaireByID(id: "5f5cddd216e5193e0cf73cf8") {
+      title
+      owner{
+        name
+      }
+      questions {
+        question
+      }
+    }
+  }
+  
+  mutation addQuestionaire {
+    addQuestionaire(title: "daud", category: "simpel", owner: "5f5c7f0a1114ba2bc0fcf371", upVote: 5, downVote: 5, views: 10, backgroundImage: "ldskjflkasjdf") {
+      title,
+      downVote,
+      views,
+      backgroundImage,
+      owner {
+        name,
+        email
+        questionaires {
+          title
+        }
+      }
+    }
+  }
+  
+  query {
+    getUserByID(id: "5f61cf935f2ec40aac93d69c"){
+      name
+      questions {
+       question
+        user {
+          name
+        }
+    }
+    }
+  }
+  
+  mutation deleteUser {
+    deleteUser(email: "daud.ahmed@tranchulas.com") {
+      email
+    }
+  }
+  
+  mutation addQuestion {
+    addQuestion(question: "What is your name?", category:"test", dislikes: 5, likes:5, questionaire: "5f61d0d65cfd411290b82728", user: "5f61cf935f2ec40aac93d69c") {
+      question
+      questionaire {
+        title
+        category
+      }
+    }
+  }
+  
+  mutation deleteAllQuestions {
+    deleteAllQuestions(question: "What is your name?") {
+      deletedCount
+    }
+  }
+  
+  mutation editQuestion {
+    editQuestion(id:"5f5d032f91712606106dd50e", question: "How old are you?") {
+      question
+      questionaire {
+        title
+        category
+      }
+    }
+  }
+  
+  mutation deleteQuestion {
+    deleteQuestion(question: "How old are you?") {
+      question
+      questionaire {
+        title
+        category
+      }
+    }
+  }
+  
+  mutation deleteQuestion {
+    deleteQuestion(question: "How old are you?") {
+      question
+      questionaire {
+        title
+        category
+      }
+    }
+  }
+  
+  query getQuestion {
+    getQuestionByID(id: "5f5d0473616cee2194f90a22") {
+      question
+      questionaire {
+        title
+        owner {
+          name
+        }
+      }
+    }
+  }
+  
+  mutation addAnswer {
+    addAnswer(answer: "Daud ahmed", category:"test", dislikes: 5, likes:5, questionaire: "5f5cddd216e5193e0cf73cf8", user: "5f5cd7c9e677e26261b32cf1", question: "5f5d0473616cee2194f90a22") {
+      answer
+      id
+      questionaire {
+        title
+        category
+      }
+    }
+  }
+  
+  mutation editAnswer {
+    editAnswer(id: "5f5d0d33696dac4570781c23", answer: "Ali Hafeez") {
+      id,
+     category,
+      answer {
+        answer
+      }
+    }
+  }
+  
+  query getAnswer {
+    getAnswerByID(id: "5f5d0cd431ef781b0c86c502") {
+      answer
+      questionaire {
+        title
+        owner {
+          name
+        }
+      }
+    }
+  }
+  
+  mutation editUser {
+    editUser(id: "5f61cf935f2ec40aac93d69c", name:"Inzi bhai") {
+      name
+      email
+    }
+  }
+  
+mutation createUser {
+  addUser(name: "Ali Hafeez", email: "talhaalddi@gmail.com", password: "daud", age: 18) {
+    name
+    email
+    age
+  }
+}  
+
+query {
+  login(email: "ali@gmail.com", password: "daud"){
+    userId
+    token
+    tokenExpiration
+  }
+}
+
+query {
+  googleLogin(tokenID: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNDM1ODA2MTM0MzUtamxvZW4xOHZjM2NnODg5ZG90bzh0bTcwc3M2cTFyc3UuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MzU4MDYxMzQzNS1qbG9lbjE4dmMzY2c4ODlkb3RvOHRtNzBzczZxMXJzdS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwNzAwODE4MzY2ODY5NzQ2ODk1OSIsImVtYWlsIjoiZGF1ZGFobWVkODcwQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiQnc1bnJJc0dzVVA1cFZiUWNyNDJHdyIsIm5hbWUiOiJEYXVkIEFobWVkIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hLS9BT2gxNEdoNmh3Zmp1a2tqMDZTejg5Qy1fQTVvdE5OUlpkWnRtY0ZUeWtvTj1zOTYtYyIsImdpdmVuX25hbWUiOiJEYXVkIiwiZmFtaWx5X25hbWUiOiJBaG1lZCIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjAwNTE2NTYxLCJleHAiOjE2MDA1MjAxNjEsImp0aSI6IjhkZjQ3ZmJmZWFjOGI1MmJhOTM5M2M3ZDVlMTQ1YjEzNDMxNmRhYjMifQ.ITB6rdNtpPXcsCpFLk7Tu_faB-5S-dp8nRURXEoYx8_dQGmL0o5CoIN58QrtvytmT25ew4OfSqGcOkw_qQAHAt60t7MDHTpsZQxgZmxtHv8uawPzZsqMW_eyZ4qwvOaNJJwaiS4d4a-rJkj2JPdBGkAQrsJ5KUA0yxnjWOz1rIJtLQTmPY76KlulNB_v5OoeJJ0h0nGZva-jmJeAmZCu_HtES4xBAo3ONH3MyL0uumydQhZvhM_ES-OKUYHLiVdB2BYSP4odSOBnSbDthEXW7Uo2XVBEHcZVmTzwkqtsDBML6lpOHcPwycrZyeo8nUYWvk1FvFIJDAUxuQuV2pUJfQ"){
+    userId
+    token
+    tokenExpiration
+    createdAt
+  }
+}
+
+
+query {
+  getUserByID(id: "5f66200627060a2a60ede4a0") {
+    invitedQuestionaires {
+      permission
+      questionaire {
+        title
+      }
+    }
+  }
+}
+
+query {
+  getAllQuestionaires {
+		title    
+  }
+}
+
+mutation {
+  inviteUserToFillQuestionaire(email: "daudahmed870@gmail.com", questionaireId: "5f61d0d65cfd411290b82728") {
+    msg
+  }
+}
