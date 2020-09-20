@@ -49,7 +49,7 @@ export const getQuestionaireById = async (parentValue, args, req) => {
   const questionaire = await Questionaire.findOne({_id: args.id});
   const user = await User.findOne({_id: req.userId})
   if(questionaire) {
-    if(questionaire.owner === req.userId || questionaire.read.includes(user.email)) {
+    if(questionaire.owner == req.userId || questionaire.read.includes(user.email)) {
       return questionaire;
     } else {
       throw new Error("You do not have permission to view this questionaire");

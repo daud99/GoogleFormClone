@@ -9,6 +9,7 @@ const Questionaire = require('../../models/QuestionaireSchema');
 const Question = require('../../models/QuestionSchema');
 const Answer = require('../../models/AnswerSchema');
 const  User = require('../../models/User');
+const auth = require("../../auth");
 
 export const getUserQuestionaires = async (parentValue, args) => {
   return await Questionaire.find({_id: {$in: parentValue.questionaires}});

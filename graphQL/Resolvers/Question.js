@@ -3,6 +3,7 @@ const Question = require('../../models/QuestionSchema');
 const Answer = require('../../models/AnswerSchema');
 const Questionaire = require('../../models/QuestionaireSchema');
 const User = require('../../models/User');
+const auth = require("../../auth");
 
 export const getQuestionQuestionaire = async (parentValue, args) => {
   return await Questionaire.findOne({'_id': parentValue.questionaire});
