@@ -6,6 +6,7 @@ import axios from '../../axiosSet';
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
+import { Link } from 'react-router-dom';
 
 class ViewAllQuestionaire extends React.Component {
   constructor(props) {
@@ -29,18 +30,22 @@ class ViewAllQuestionaire extends React.Component {
           textDecoration: "none"
         }
       },
-      
+      questionaires:[],
       succesMsg:'',
       errMsg:'',
       succes:false,
-      err:false,
+      err:false
       
     };
+    this.deleteQuestionaire = this.deleteQuestionaire.bind(this);
+    this.regetQuestionaire = this.regetQuestionaire.bind(this);
+
   }
   componentWillMount() {
     axios.post('/graphql',{
-        query: `query {
+        query: `query getQuestionairesOfOwner($userIdO:String!){
             getQuestionairesOfOwner(owner: $userIdO) {
+                id,
                 title,
                 category,
                 createdAt
@@ -50,32 +55,92 @@ class ViewAllQuestionaire extends React.Component {
             userIdO:localStorage.getItem('useId')
           }
       }).then((result) => {
-        console.log(result.data)
-        // this.questionaireId=result.data.data.addQuestionaire.id;
-        this.setState({succes:true})
-        this.setState({succesMsg:'Questionaire created, Now add questions to it'})
+        this.setState({questionaires:result.data.data.getQuestionairesOfOwner})
+        console.log(this.state.questionaires)
+        // this.setState({succes:true})
+        // this.setState({succesMsg:'Questionaire created, Now add questions to it'})
       });
   }
-
+  regetQuestionaire(){
+    axios.post('/graphql',{
+      query: `query getQuestionairesOfOwner($userIdO:String!){
+          getQuestionairesOfOwner(owner: $userIdO) {
+              id,
+              title,
+              category,
+              createdAt
+        }
+      }`,
+        variables:{
+          userIdO:localStorage.getItem('useId')
+        }
+    }).then((result) => {
+      this.setState({questionaires:result.data.data.getQuestionairesOfOwner})
+      console.log(this.state.questionaires)
+      // this.setState({succes:true})
+      // this.setState({succesMsg:'Questionaire created, Now add questions to it'})
+    });
+  }
+  deleteQuestionaire(idd){
+    axios.post('/graphql',{
+      query: `mutation deleteQuestionaire($Id: String!){
+        deleteQuestionaire(id: $Id) {
+              id,
+              title
+        }
+      }`,
+        variables:{
+          Id:idd
+        }
+    }).then((result) => {
+      this.regetQuestionaire();
+      this.setState({succes:true})
+      this.setState({succesMsg:'Questionaire Deleted'+'=>'+result.data.data.deleteQuestionaire.title})
+    });
+  }
 
   render() {
-    // let notifi;
-
-    // if(this.state.succes){
-    //   notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
-    // }else if(this.state.err){
-    //   notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
-    // }
-    // for (let index = 0; index < this.state.questions.length; index++) {
-    // }
+    let notifi;
+    let rows=[]
+    if(this.state.succes){
+      notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
+    }else if(this.state.err){
+      notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
+    }
+    for (let index = 0; index < this.state.questionaires.length; index++) {
+      rows.push(<tr key={index}>
+        <th scope="row">{index}</th>
+        <td>{this.state.questionaires[index].title}</td>
+        <td>{this.state.questionaires[index].category}</td>
+        <td>{this.state.questionaires[index].createdAt}</td>
+        <td><Button color="primary" round>Invite Users</Button>
+            <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
+            <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button>
+        </td>
+      </tr>)
+    }
 
     return (
       <div style={{paddingLeft:'20px', paddingRight:'40px'}}>
-          {/* {notifi} */}
+          {notifi}
           <GridContainer>
-          <GridItem xs={12} sm={12} md={8} lg={8}>
+          <GridItem xs={12} sm={12} md={12} lg={12}>
             <Card>
                 <CardBody>
+                <table class="table table-responsive table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">CreatedAt</th>
+                      <th scope="col" style={{textAlign:"center"}}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows}
+                  </tbody>
+                </table>
                 </CardBody> 
             </Card>
           </GridItem>

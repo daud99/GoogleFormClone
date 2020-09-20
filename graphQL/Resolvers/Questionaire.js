@@ -19,7 +19,9 @@ export const getOwnerQuestionaire = async (parentValue, args) => {
   if("password" in user) delete user.password;
   return user;
 }
-
+export const getQuestionaireOfOwner = async (parentValue, args) => {
+  return await Questionaire.find({owner: args.owner});
+}
 export const getQuestionaireQuestions = async (parentValue, args) => {
   return await Question.find({'_id': {$in: parentValue.questions}});
 }
