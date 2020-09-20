@@ -28,18 +28,18 @@ export const getAnswerById = async (parentValue, args, req) => {
 }
 
 export const getAnswerByUserAndQuestionaire = async (parentValue, args, req) => {
-  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  // if(request_invalid) {
-  //   throw request_invalid;
-  // }
+  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  if(request_invalid) {
+    throw request_invalid;
+  }
   return await Answer.find({user: args.user, questionaire: args.questionaire});
 }
 
 export const addNewAnswer = async (parentValue, args, req) => {
-    // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-    // if(request_invalid) {
-    //   throw request_invalid;
-    // }
+    const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+    if(request_invalid) {
+      throw request_invalid;
+    }
     try {
       let answer = await Answer.findOne({
         user: args.user,

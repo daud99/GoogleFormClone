@@ -114,10 +114,10 @@ export const addInviteQuestionaire = async (parentValue, args, req) => {
   };
   
   export const inviteUser = async (parentValue, args, req) => {
-    // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-    // if(request_invalid) {
-    //   throw request_invalid;
-    // }
+    const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+    if(request_invalid) {
+      throw request_invalid;
+    }
     try {
       let permission = args.permission;
       if(!permission || permission == '') {

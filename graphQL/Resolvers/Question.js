@@ -31,10 +31,10 @@ export const getQuestionById = async (parentValue, args, req) => {
 }
 
 export const addNewQuestion = async (parentValue, args, req) => {
-    // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-    // if(request_invalid) {
-    //   throw request_invalid;
-    // }
+    const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+    if(request_invalid) {
+      throw request_invalid;
+    }
     try {
     
       let question = new Question({

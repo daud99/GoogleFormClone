@@ -44,10 +44,10 @@ export const getAllQuestionaire = async (parentValue, args, req) => {
 }
 
 export const getQuestionaireById = async (parentValue, args, req) => {
-  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  // if(request_invalid) {
-  //   throw request_invalid;
-  // }
+  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  if(request_invalid) {
+    throw request_invalid;
+  }
   const questionaire = await Questionaire.findOne({_id: args.id});
   // if(questionaire) {
   //   if(questionaire.owner == req.userId) {
