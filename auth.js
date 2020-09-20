@@ -107,7 +107,7 @@ module.exports = new class {
               User.findOne({_id: userId})
                 .then(user => {
                     if(user) {
-                        if(!flag || user.type !== 'super-admin' || user.type !== 'admin') {
+                        if(!flag || (user.type !== 'super-admin' && user.type !== 'admin')) {
                             const error = new Error('not authenticated');
                             error.code = 401;
                             return reject(error);
@@ -137,7 +137,7 @@ module.exports = new class {
               User.findOne({_id: userId})
                 .then(user => {
                     if(user) {
-                        if(!flag || user.type !== 'super-admin' || user.type !== 'admin' || user.type !== 'user') {
+                        if(!flag || (user.type !== 'super-admin' && user.type !== 'admin' && user.type !== 'user')) {
                             const error = new Error('not authenticated');
                             error.code = 401;
                             return reject(error);

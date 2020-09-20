@@ -20,7 +20,7 @@ const AnswerType = new GraphQLObjectType({
             type: GraphQLNonNull(GraphQLString)
         },
         category: {
-            type: GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         likes: {
             type: GraphQLInt,

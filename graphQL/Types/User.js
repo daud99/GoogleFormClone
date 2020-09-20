@@ -37,6 +37,9 @@ const UserType = new GraphQLObjectType({
     password: {
       type: GraphQLNonNull(GraphQLString)
     },
+    _id: {
+      type: GraphQLString
+    },
     archived: {
       type: GraphQLBoolean,
       defaultValue: false

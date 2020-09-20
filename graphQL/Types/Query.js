@@ -9,10 +9,12 @@ import QuestionaireType from './Questionaire'
 import AnswerType from './Answer'
 import QuestionType from './Question'
 import AuthDataType from './AuthData'
+import StandardType from './Standard'
 import * as userResolvers from '../Resolvers/User'
 import * as questionaireResolvers from '../Resolvers/Questionaire'
 import * as answerResolvers from '../Resolvers/Answer'
 import * as questionResolvers from '../Resolvers/Question'
+
 const query = new GraphQLObjectType({
   name: 'RootQuery',
   fields: ({
@@ -60,6 +62,20 @@ const query = new GraphQLObjectType({
         return answerResolvers.getAnswerById(parentValue, args, req)
       }
     },
+    getAnswerByUserAndQuestionaire: {
+      type: new graphql.GraphQLList(AnswerType),
+      args: {
+        user: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        questionaire: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve(parentValue, args, req) {
+        return answerResolvers.getAnswerByUserAndQuestionaire(parentValue, args, req)
+      }
+    },
     getQuestionByID: {
       type: QuestionType,
       args: {
@@ -69,6 +85,20 @@ const query = new GraphQLObjectType({
       },
       resolve(parentValue, args, req) {
         return questionResolvers.getQuestionById(parentValue, args, req)
+      }
+    },
+    alertOwnerOnQuestionaireFill: {
+      type: StandardType,
+      args: {
+        questionaireId: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        email: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        } 
+      },
+      resolve(parentValue, args, req) {
+        return questionaireResolvers.alertOwnerOnQuestionaireFill(parentValue, args, req)
       }
     },
     login: {

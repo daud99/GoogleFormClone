@@ -86,7 +86,7 @@ mutation addQuestionaire {
   }
   
   mutation addQuestion {
-    addQuestion(question: "What is your name?", category:"test", dislikes: 5, likes:5, questionaire: "5f61d0d65cfd411290b82728", user: "5f61cf935f2ec40aac93d69c") {
+    addQuestion(question: "What is your name?", dislikes: 5, likes:5, questionaire: "5f679c1d3d85f241c816bf00", user: "5f679bcb3399e4352456bdc7") {
       question
       questionaire {
         title
@@ -144,7 +144,7 @@ mutation addQuestionaire {
   }
   
   mutation addAnswer {
-    addAnswer(answer: "Daud ahmed", category:"test", dislikes: 5, likes:5, questionaire: "5f5cddd216e5193e0cf73cf8", user: "5f5cd7c9e677e26261b32cf1", question: "5f5d0473616cee2194f90a22") {
+    addAnswer(answer: "Ali Hafeez", dislikes: 5, likes:5, questionaire: "5f679c1d3d85f241c816bf00", user: "5f679f76551ec32f204d4cc1", question: "5f679d01605d60361c029a61") {
       answer
       id
       questionaire {
@@ -227,7 +227,68 @@ query {
 }
 
 mutation {
-  inviteUserToFillQuestionaire(email: "daudahmed870@gmail.com", questionaireId: "5f61d0d65cfd411290b82728") {
+  inviteUserToFillQuestionaire(email: "daudahmed870@gmail.com", questionaire: "5f61d0d65cfd411290b82728", senderId: "5f66200627060a2a60ede4a0") {
     msg
+  }
+}
+
+mutation addQuestionaire {
+  addQuestionaire(title: "daud", category: "simpel", owner: "5f5c7f0a1114ba2bc0fcf371", upVote: 5, downVote: 5, backgroundImage: "ldskjflkasjdf") {
+    title,
+    downVote
+    backgroundImage,
+    owner {
+      name,
+      email
+      questionaires {
+        title
+      }
+    }
+  }
+}
+
+query {
+  alertOwnerOnQuestionaireFill(questionaireId: "5f61d0d65cfd411290b82728", email: "daudahmed870@gmail.com") {
+    msg
+  }
+}
+
+/*
+  This is the request which will be used to find all the user which have submitted any answer for the given questionaire id
+*/
+query {
+  getQuestionaireByID(id: "5f679c1d3d85f241c816bf00") {
+    answers {
+      answer
+      user {
+        _id
+        email
+        name
+      }
+    }
+  }
+}
+
+/*
+  This will return the the question title along with id as well as all it's question
+*/
+query {
+  getQuestionaireByID(id: "5f679c1d3d85f241c816bf00") {
+    title
+    category
+   questions {
+    question
+    id
+    }
+  }
+} 
+
+/*
+  This will return all the ansers answer by the user with given user and questionaire
+*/
+query {
+  getAnswerByUserAndQuestionaire(user: "5f679bcb3399e4352456bdc7", questionaire: "5f679c1d3d85f241c816bf00") {
+    answer
+    id
   }
 }

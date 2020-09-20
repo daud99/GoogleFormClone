@@ -12,7 +12,7 @@ const AnswerSchema = new mongoose.Schema({
     },
     category: {
       type: String,
-      required: true,
+      required: false,
     },
     likes: {
       type: Number,
