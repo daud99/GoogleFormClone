@@ -3,6 +3,7 @@ const Answer = require('../../models/AnswerSchema');
 const Question = require('../../models/QuestionSchema');
 const Questionaire = require('../../models/QuestionaireSchema');
 const User = require('../../models/User');
+const auth = require("../../auth");
 
 
 export const getAnswerQuestionaire = async (parentValue, args) => {

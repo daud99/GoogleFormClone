@@ -56,7 +56,6 @@ class ViewQuestionaire extends React.Component {
             IdO:idQ
           }
       }).then((result) => {
-        console.log(result.data.data.getQuestionaireByID)
         axios.post('/graphql',{
             query: `query getQuestionsOfQuestionaire($IdOO:String!){
                 getQuestionsOfQuestionaire(idp: $IdOO) {
@@ -70,7 +69,7 @@ class ViewQuestionaire extends React.Component {
                 IdOO:result.data.data.getQuestionaireByID.id
               }
           }).then((result) => {
-            console.log(result.data.data.getQuestionsOfQuestionaire)
+            console.log(result.data)
           });
       });
   }

@@ -23,6 +23,7 @@ import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 // core components
 import Admin from "layouts/Admin.js";
 import Login from "./views/Login/login.js";
+import ViewQuestionaire from "./views/Questionaire/viewSingleQuestionaire";
 
 import 'jquery/src/jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -52,6 +53,7 @@ ReactDOM.render(
           <Route path="/l" component={Admin} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SingUp} />
+          <Route path="/questionaire/:id" component={ViewQuestionaire} />
           {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
           {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />} */}
           <Redirect from="/" to="/l/dashboard" />
