@@ -19,9 +19,11 @@ export const getQuestionaireOwner = async (parentValue, args) => {
   } else {
     throw new Error("No user found");
   }
-  
-}
 
+}
+export const getQuestionaireOfOwner = async (parentValue, args) => {
+  return await Questionaire.find({owner: args.owner});
+}
 export const getQuestionaireQuestions = async (parentValue, args) => {
   return await Question.find({'_id': {$in: parentValue.questions}});
 }
@@ -175,7 +177,7 @@ export const alertOwnerOnQuestionaireFill = async (parentValue, args, req) => {
           message: `The ${args.email} user has filled the form ${questionaire.title}`
       });
       try {
-      
+
         let transporter = nodemailer.createTransport({
             host: EmailConfig.host,
             port: EmailConfig.port,
@@ -185,7 +187,7 @@ export const alertOwnerOnQuestionaireFill = async (parentValue, args, req) => {
                 pass: EmailConfig.password
             }
         });
-        
+
         // send mail with defined transport object
         let info = await transporter.sendMail({
             to: args.email, // list of receivers
@@ -205,7 +207,7 @@ export const alertOwnerOnQuestionaireFill = async (parentValue, args, req) => {
     } else {
       return {msg: "No need to alert the owner"};
     }
-       
+
   } catch(e) {
     console.log(e);
     throw new Error('Error while alerting user for questionaire completion');

@@ -18,7 +18,7 @@ async function ignite() {
             res.send("hello daud");
         });
         
-        // app.use(auth.graphQLAuthentication);
+        app.use(auth.graphQLAuthentication);
         
         app.use('/graphql', graphqlHTTP({
             schema,

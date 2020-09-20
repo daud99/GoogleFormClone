@@ -24,6 +24,9 @@ const QuestionaireType = new GraphQLObjectType({
     category: {
       type: GraphQLNonNull(GraphQLString)
     },
+    createdAt:{
+      type: GraphQLString
+    },
     upVote: {
       type: GraphQLInt,
       defaultValue: 0

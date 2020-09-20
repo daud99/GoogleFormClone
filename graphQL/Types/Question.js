@@ -36,6 +36,9 @@ const QuestionType = new GraphQLObjectType({
                 return questionResolvers.getQuestionQuestionaire(parentValue, args)
             }
         },
+        createdAt:{
+            type: GraphQLString
+          },
         user: {
             type: UserType,
             resolve(parentValue, args) {
