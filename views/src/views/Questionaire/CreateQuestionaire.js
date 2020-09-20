@@ -91,7 +91,6 @@ class CreateQuestionaire extends React.Component {
   }
 
   submitQuestionare(){
-    console.log(this.questionaireObj)
     if(this.questionaireObj.title==='' || this.questionaireObj.questionCategory===''){
       alert("Please fill all fields")
     }else if(this.questionaireObj.title!=='' && this.questionaireObj.questionCategory!==''){
@@ -108,8 +107,6 @@ class CreateQuestionaire extends React.Component {
             userIdO:localStorage.getItem('useId')
           }
       }).then((result) => {
-        console.log(result);
-        console.log(result.data.data.addQuestionaire.id)
         this.questionaireId=result.data.data.addQuestionaire.id;
         this.setState({allowQuestionAdd:true})
         this.setState({succes:true})
@@ -118,7 +115,6 @@ class CreateQuestionaire extends React.Component {
     }
   }
   async submitQuestions(){
-    console.log(this.questionsExt)
     if(this.questionsExt.length>0){
       for (let index = 0; index < this.questionsExt.length; index++) {
         if(this.questionsExt[index].titleQ !== '' && this.questionsExt[index].questionCategory!==''){
@@ -136,7 +132,6 @@ class CreateQuestionaire extends React.Component {
                 questionaireO:this.questionaireId
               }
           }).then((result) => {
-            console.log(result.data)
             this.setState({succes:true})
           });
         }

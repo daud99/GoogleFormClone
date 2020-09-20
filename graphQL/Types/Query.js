@@ -1,7 +1,8 @@
 const graphql = require('graphql')
 const {
   GraphQLObjectType,
-  GraphQLString
+  GraphQLString,
+  GraphQLList
 } = graphql
 
 import UserType from './User'
@@ -25,6 +26,17 @@ const query = new GraphQLObjectType({
       },
       resolve(parentValue, args, req) {
         return userResolvers.getUserById(parentValue, args, req)
+      }
+    },
+    getQuestionsOfQuestionaire: {
+      type: new GraphQLList(QuestionType),
+      args: {
+        idp: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve(parentValue, args) {
+        return questionResolvers.questionsOfQuestionaire(parentValue, args)
       }
     },
     getQuestionaireByID: {
@@ -58,6 +70,17 @@ const query = new GraphQLObjectType({
       },
       resolve(parentValue, args, req) {
         return answerResolvers.getAnswerById(parentValue, args, req)
+      }
+    },
+    getQuestionairesOfOwner: {
+      type: new GraphQLList(QuestionaireType),
+      args: {
+        owner: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve(parentValue, args) {
+        return questionaireResolvers.getQuestionaireOfOwner(parentValue, args)
       }
     },
     getQuestionByID: {

@@ -14,7 +14,9 @@ export const getQuestionUser = async (parentValue, args) => {
   if("password" in user) delete user.password;
   return user;
 }
-
+export const questionsOfQuestionaire = async (parentValue, args) => {
+  return await Question.find({questionaire: args.idp});
+}
 export const getQuestionAnswer = async (parentValue, args) => {
   return await Answer.findOne({'_id': parentValue.answer});
 }
