@@ -108,12 +108,12 @@ class ViewAllQuestionaire extends React.Component {
       notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
     }
     for (let index = 0; index < this.state.questionaires.length; index++) {
-      rows.push(<tr key={index}>
-        <th scope="row">{index}</th>
-        <td>{this.state.questionaires[index].title}</td>
-        <td>{this.state.questionaires[index].category}</td>
-        <td>{this.state.questionaires[index].createdAt}</td>
-        <td><Button color="primary" round>Invite Users</Button>
+      rows.push(<tr key={index} className="d-flex">
+        <td scope="col" className="col-1">{index}</td>
+        <td scope="col" className="col-5">{this.state.questionaires[index].title}</td>
+        <td scope="col" className="col-3">{this.state.questionaires[index].category}</td>
+        <td scope="col" className="col-3">{this.state.questionaires[index].createdAt}</td>
+        <td scope="col" className="col-4"><Button color="primary" round>Invite Users</Button>
             <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
             <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button>
         </td>
@@ -124,17 +124,17 @@ class ViewAllQuestionaire extends React.Component {
       <div style={{paddingLeft:'20px', paddingRight:'40px'}}>
           {notifi}
           <GridContainer>
-          <GridItem xs={12} sm={12} md={12} lg={12}>
+          {/* <GridItem xs={12} sm={12} md={12} lg={12}> */}
             <Card>
                 <CardBody>
                 <table class="table table-responsive table-hover">
                   <thead class="thead-dark">
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Title</th>
-                      <th scope="col">Category</th>
-                      <th scope="col">CreatedAt</th>
-                      <th scope="col" style={{textAlign:"center"}}>Action</th>
+                    <tr className="d-flex">
+                      <th scope="col" className="col-1">#</th>
+                      <th scope="col" className="col-5">Title</th>
+                      <th scope="col" className="col-3">Category</th>
+                      <th scope="col" className="col-3">CreatedAt</th>
+                      <th scope="col" style={{textAlign:"center"}} className="col-4">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -143,7 +143,7 @@ class ViewAllQuestionaire extends React.Component {
                 </table>
                 </CardBody> 
             </Card>
-          </GridItem>
+          {/* </GridItem> */}
           </GridContainer>
       </div>
     );

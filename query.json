@@ -270,7 +270,7 @@ query {
 }
 
 /*
-  This will return the the question title along with id as well as all it's question
+  This will return the the questionaire title along with id as well as all it's question
 */
 query {
   getQuestionaireByID(id: "5f679c1d3d85f241c816bf00") {

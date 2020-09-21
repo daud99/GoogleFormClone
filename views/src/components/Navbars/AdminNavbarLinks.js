@@ -2,6 +2,8 @@ import React from "react";
 import classNames from "classnames";
 import { withRouter } from "react-router-dom";
 // import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -69,6 +71,9 @@ const AdminNavbarLinks = (props) => {
     localStorage.removeItem("photo");
     localStorage.removeItem("createdAt");
     localStorage.removeItem("tokenid");
+    this.props.onTokenGet('');
+    this.props.onUserIdGet('');
+    this.props.onUserTypeGet('');
     props.history.push('/login')
   }
   const handleLogoutFailure =(response)=> {
@@ -163,4 +168,13 @@ const AdminNavbarLinks = (props) => {
   );
 }
 
-export default withRouter(AdminNavbarLinks)
+const mapPropsToDispatch = dispatch => {
+  return {
+    onTokenGet: (token) => dispatch({type: 'SETTOKEN', token}),
+    onUserIdGet: (userId)=> dispatch({type: 'SETUSERID', userId}),
+    onUserTypeGet: (usertype)=> dispatch({type: 'SEUSERTYPE', usertype})
+  }
+}
+
+
+export default connect(null, mapPropsToDispatch)(withRouter(AdminNavbarLinks))
