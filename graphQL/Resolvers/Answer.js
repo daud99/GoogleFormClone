@@ -7,8 +7,8 @@ const auth = require("../../auth");
 
 
 export const getAnswerQuestionaire = async (parentValue, args) => {
-    return await Questionaire.findOne({'_id': parentValue.questionaire});
-  }
+  return await Questionaire.findOne({'_id': parentValue.questionaire});
+}
 export const getAnswerUser = async (parentValue, args) => {
   let user = await User.findOne({'_id': parentValue.user});
   user = user.toObject();
@@ -27,30 +27,46 @@ export const getAnswerById = async (parentValue, args, req) => {
   return await Answer.findOne({_id: args.id});
 }
 
+export const getAnswerByUserAndQuestionaire = async (parentValue, args, req) => {
+  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  if(request_invalid) {
+    throw request_invalid;
+  }
+  return await Answer.find({user: args.user, questionaire: args.questionaire});
+}
+
 export const addNewAnswer = async (parentValue, args, req) => {
     const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
     if(request_invalid) {
       throw request_invalid;
     }
     try {
-      const userExists = await User.exists({
-        _id: args.user
-      });
-      const questionaireExists = await Questionaire.exists({
-        _id: args.questionaire
-      });
-    
-      let answer = new Answer({
-        answer: args.answer,
-        category: args.category,
-        likes: args.likes,
-        dislikes: args.dislikes,
-        questionaire: args.questionaire,
+      let answer = await Answer.findOne({
+        user: args.user,
         question: args.question,
-        user: req.userId
+        questionaire: args.questionaire
       });
-    
-      return await answer.save();
+     
+      if(answer) {
+        answer.answer = args.answer;
+      } else {
+        answer = new Answer({
+          answer: args.answer,
+          likes: args.likes,
+          dislikes: args.dislikes,
+          questionaire: args.questionaire,
+          question: args.question,
+          user: args.user
+        });
+        const questionaire = await Questionaire.findOne({_id: args.questionaire});
+        if(questionaire) {
+          questionaire.answers.push(answer._id);
+          await questionaire.save();
+        } else {
+          throw new Error("Error no questionaire with given questionaire id");
+        }
+      }
+      return await answer.save();      
     } catch(e) {
       console.log(e);
       throw new Error('Error while adding new Answer');

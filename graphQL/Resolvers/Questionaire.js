@@ -5,19 +5,21 @@ var path = require('path');
 var nodemailer = require("nodemailer");
 const SiteConfig = require("../../config/site");
 const EmailConfig = require("../../config/email");
-
 const Questionaire = require('../../models/QuestionaireSchema');
+const Question = require('../../models/QuestionSchema');
+const Answer = require('../../models/AnswerSchema');
 const  User = require('../../models/User');
-const  Question = require('../../models/QuestionSchema');
-const  Answer = require('../../models/AnswerSchema');
 
 const auth = require("../../auth");
 
-export const getOwnerQuestionaire = async (parentValue, args) => {
-  let user = await User.findOne({'_id': parentValue.user});
-  user = user.toObject();
-  if("password" in user) delete user.password;
-  return user;
+export const getQuestionaireOwner = async (parentValue, args) => {
+  let user = await User.findOne({'_id': parentValue.owner});
+  if(user) {
+    return {...user._doc, password: null};
+  } else {
+    throw new Error("No user found");
+  }
+
 }
 export const getQuestionaireOfOwner = async (parentValue, args) => {
   return await Questionaire.find({owner: args.owner});
@@ -47,16 +49,16 @@ export const getQuestionaireById = async (parentValue, args, req) => {
     throw request_invalid;
   }
   const questionaire = await Questionaire.findOne({_id: args.id});
-  const user = await User.findOne({_id: req.userId})
-  if(questionaire) {
-    if(questionaire.owner == req.userId || questionaire.read.includes(user.email)) {
-      return questionaire;
-    } else {
-      throw new Error("You do not have permission to view this questionaire");
-    }
-  } else {
-    throw new Error("Questionaire not found");
-  }
+  // if(questionaire) {
+  //   if(questionaire.owner == req.userId) {
+  //     return questionaire;
+  //   } else {
+  //     throw new Error("You do not have permission to view this questionaire");
+  //   }
+  // } else {
+  //   throw new Error("Questionaire not found");
+  // }
+  return questionaire;
 }
 
 export const editQuestionaire = async (parentValue, args, req) => {
@@ -81,15 +83,34 @@ export const editQuestionaire = async (parentValue, args, req) => {
 };
 
 export const deleteQuestionaire = async (parentValue, args, req) => {
-  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  if(request_invalid) {
-    throw request_invalid;
-  }
+  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  // if(request_invalid) {
+  //   throw request_invalid;
+  // }
   try {
     let result = await Questionaire.findOneAndRemove({'_id': args.id});
+    if(result) {
+      await Question.deleteMany({'questionaire': result._id});
+      await Answer.deleteMany({'questionaire': result._id});
+      let users = await User.find(
+        {questionaires: {
+        $elemMatch: {
+          $eq: result._id
+          }
+        }
+      });
+      console.log("users found are");
+      console.log(users);
+      for(var i in users) {
+        console.log(i);
+        users[i].questionaires.remove(result._id);
+        await users[i].save();
+      }
+    }
     return result;
   }
   catch(e) {
+    console.log(e);
     throw new Error('Error while deleting Questionaire');
   }
 };
@@ -109,15 +130,12 @@ export const deleteAllQuestionaires = async (parentValue, args, req) => {
 };
 
 export const addNewQuestionaire = async (parentValue, args, req) => {
-  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  if(request_invalid) {
-    throw request_invalid;
-  }
+  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  // if(request_invalid) {
+  //   throw request_invalid;
+  // }
   try {
-    const userExists = await User.exists({
-      _id: args.owner
-    });
-  
+
     let questionaire = new Questionaire({
       title: args.title,
       category: args.category,
@@ -126,75 +144,72 @@ export const addNewQuestionaire = async (parentValue, args, req) => {
       downVote: args.downVote,
       backgroundImage: args.backgroundImage,
       backgroundColor: args.backgroundColor,
-      backgroundVideo: args.backgroundVideo,
-      questions: args.questions,
-      answers: args.answers
+      backgroundVideo: args.backgroundVideo
     });
-  
-    return await questionaire.save();
+    questionaire = await questionaire.save();
+    console.log(args.owner);
+    const user = await User.findOne({_id: args.owner});
+    if(user) {
+      user.questionaires.push(questionaire._id);
+      await user.save();
+    } else {
+      throw new Error('No such user exist for given owner');
+    }
+    return questionaire;
   } catch(e) {
+    console.log(e);
     throw new Error('Error while adding new Questionaire');
   }
 }
 
-export const inviteUser = async (parentValue, args, req) => {
-  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  if(request_invalid) {
-    throw request_invalid;
-  }
+export const alertOwnerOnQuestionaireFill = async (parentValue, args, req) => {
+  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  // if(request_invalid) {
+  //   throw request_invalid;
+  // }
   try {
     const questionaire = await Questionaire.findOne({_id: args.questionaireId});
-    if(questionaire) {
-      if(questionaire._id === req.userId) {
-        if(!questionaire.write.includes(args.email))
-        { 
-          questionaire.write.push(args.email);
-        }
-      } 
-      if(!questionaire.read.includes(args.email))
-      { 
-        questionaire.read.push(args.email);
-      }
-      await questionaire.save();
-      // G:/projects/GoogleFormClone/emails/invite-user.htm
-      var template = fs.readFileSync(path.join('emails', 'invite-user.htm'), 'utf-8');
+    if(!(questionaire.owner == req.userId)) {
+      var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
 
-        var emailHTML = ejs.render(template, {
-            siteURL: SiteConfig.url
+      var emailHTML = ejs.render(template, {
+          siteURL: SiteConfig.url,
+          message: `The ${args.email} user has filled the form ${questionaire.title}`
+      });
+      try {
+
+        let transporter = nodemailer.createTransport({
+            host: EmailConfig.host,
+            port: EmailConfig.port,
+            secure: EmailConfig.secure,
+            auth: {
+                user: EmailConfig.username,
+                pass: EmailConfig.password
+            }
         });
-        try {
-        
-          let transporter = nodemailer.createTransport({
-              host: EmailConfig.host,
-              port: EmailConfig.port,
-              secure: EmailConfig.secure,
-              auth: {
-                  user: EmailConfig.username,
-                  pass: EmailConfig.password
-              }
-          });
-          
-          // send mail with defined transport object
-          let info = await transporter.sendMail({
-              to: args.email, // list of receivers
-              subject: "Invitation to fill the form", // Subject line
-              html: emailHTML // html body
-          });
-  
-          if(info.accepted.length > 0) {
-            return {msg: "User is invited successfully"};
-          }
 
-      } catch(e) {
-          console.log(e);
-          return {msg: "Something went wrong while inviting the user"};
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+            to: args.email, // list of receivers
+            subject: "Invitation to fill the form", // Subject line
+            html: emailHTML // html body
+        });
+
+        if(info.accepted.length > 0) {
+          return {msg: "The owner of questionaire is informed successfully"};
+        }
+
+    } catch(e) {
+        console.log(e);
+        return {msg: "Something went wrong while informaing the owner of questionar"};
 
       }
     } else {
-      throw new Error("Questionaire doesn't exist");
+      return {msg: "No need to alert the owner"};
     }
+
   } catch(e) {
     console.log(e);
-    throw new Error('Error while inviting user for questionaire');
+    throw new Error('Error while alerting user for questionaire completion');
   }
 }

@@ -5,8 +5,10 @@ const {
 
 import UserType from './User'
 import QuestionaireType from './Questionaire'
+import InviteQuestionaireType from './InviteQuestionaire'
 import * as userResolvers from '../Resolvers/User'
 import * as questionaireResolvers from '../Resolvers/Questionaire'
+import * as inviteQuestionaireResolvers from '../Resolvers/InviteQuestionaire'
 import AnswerType from './Answer'
 import QuestionType from './Question'
 import DeleleteAllReturnType from './DeleteAllReturnType'
@@ -174,21 +176,113 @@ const mutation = new GraphQLObjectType({
         return questionaireResolvers.deleteAllQuestionaires(parentValue, args, req);
       }
     },
+    addInviteQuestionaire: {
+      type: InviteQuestionaireType,
+      args: {
+        questionaire: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        invitedUserEmail: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        senderId: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        receiverId: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        status: {
+          type: graphql.GraphQLString
+        },
+        permission: {
+          type: graphql.GraphQLString
+        }
+      },
+      resolve(parentValue, args, req) {
+        return inviteQuestionaireResolver.addInviteQuestionaire(parentValue, args, req)
+      }
+    },
+    editInviteQuestionaire: {
+      type: QuestionaireType,
+      args: {
+        id:{
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        questionaire: {
+          type: graphql.GraphQLString
+        },
+        invitedUserEmail: {
+          type: graphql.GraphQLString
+        },
+        senderId: {
+          type: graphql.GraphQLString
+        },
+        receiverId: {
+          type: graphql.GraphQLString
+        },
+        status: {
+          type: graphql.GraphQLString
+        },
+        permission: {
+          type: graphql.GraphQLString
+        }
+      },
+      resolve(parentValue, args, req) {
+        return inviteQuestionaireResolver.editInviteQuestionaire(parentValue, args, req);
+      }
+    },
+    deleteInviteQuestionaire: {
+      type: QuestionaireType,
+      args: {
+        id:{
+          type: graphql.GraphQLString
+        },
+        senderId: {
+          type: graphql.GraphQLString
+        },
+        receiverId: {
+          type: graphql.GraphQLString
+        }
+      },
+      resolve(parentValue, args, req){
+        return inviteQuestionaireResolver.deleteInviteQuestionaire(parentValue, args, req);
+      }
+    },
+    deleteAllInviteQuestionaire: {
+      type: DeleleteAllReturnType,
+      args: {
+        senderId: {
+          type: graphql.GraphQLString
+        }
+      },
+      resolve(parentValue, args, req){
+        return inviteQuestionaireResolver.deleteAllInviteQuestionaire(parentValue, args, req);
+      }
+    },
     inviteUserToFillQuestionaire: {
       type: StandardType,
       args: {
         email: {
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)       
         },
-        questionaireId: {
+        questionaire: {
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
         },
+        senderId: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        receiverId: {
+          type: graphql.GraphQLString
+        },
         permission: {
+          type: graphql.GraphQLString
+        },
+        status: {
           type: graphql.GraphQLString
         }
       },
       resolve(parentValue, args, req){
-        return questionaireResolvers.inviteUser(parentValue, args, req);
+        return inviteQuestionaireResolvers.inviteUser(parentValue, args, req);
       }
     },
     addQuestion: {
@@ -198,7 +292,7 @@ const mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
         },
         category: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         },
         likes: {
           type: graphql.GraphQLInt

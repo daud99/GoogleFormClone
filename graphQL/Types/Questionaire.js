@@ -48,16 +48,10 @@ const QuestionaireType = new GraphQLObjectType({
     backgroundVideo: {
       type: GraphQLString
     },
-    write: {
-      type: graphql.GraphQLList(graphql.GraphQLString)
-    },
-    read: {
-      type: graphql.GraphQLList(graphql.GraphQLString)
-    },
     owner: {
       type: UserType,
       resolve(parentValue, args) {
-        return questionaireResolvers.getOwnerQuestionaire(parentValue, args)
+        return questionaireResolvers.getQuestionaireOwner(parentValue, args)
       }
     },
     questions: {

@@ -43,12 +43,6 @@ let QuestionaireSchema = new mongoose.Schema({
         required:true,
         ref: 'UserSchema',
     },
-    read:  [{
-        type: String
-    }],
-    write: [{
-        type: String
-    }],
     questions: [
         { type: mongoose.Schema.Types.ObjectId, 
           ref: 'Question',

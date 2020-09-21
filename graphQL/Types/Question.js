@@ -9,7 +9,7 @@ const {
 import QuestionaireType from './Questionaire'
 import UserType from './User'
 import * as questionResolvers from '../Resolvers/Question'
-import * as questionaireResolvers from '../Resolvers/Questionaire'
+
 const QuestionType = new GraphQLObjectType({
     name: 'Question',
     fields: () => ({
@@ -20,7 +20,7 @@ const QuestionType = new GraphQLObjectType({
             type: GraphQLNonNull(GraphQLString)
         },
         category: {
-            type: GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         likes: {
             type: GraphQLInt,
