@@ -44,7 +44,6 @@ class CreateQuestionaire extends React.Component {
     this.handleQuestionaireName = this.handleQuestionaireName.bind(this);
     this.handleQuestionaireCategory = this.handleQuestionaireCategory.bind(this);
     this.handleQuestionaireQuestion = this.handleQuestionaireQuestion.bind(this);
-    this.handleQuestionaireQuestionCategory = this.handleQuestionaireQuestionCategory.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
     this.submitQuestionare = this.submitQuestionare.bind(this);
@@ -72,9 +71,6 @@ class CreateQuestionaire extends React.Component {
   handleQuestionaireQuestion = event => {
     this.questionVal=event.target.value
     this.questionObj.titleQ=event.target.value;
-  }
-  handleQuestionaireQuestionCategory = event =>{
-    this.questionObj.questionCategory=event.target.value;
   }
 
   addQuestion(){
@@ -115,9 +111,11 @@ class CreateQuestionaire extends React.Component {
     }
   }
   async submitQuestions(){
+    console.log(this.questionsExt)
     if(this.questionsExt.length>0){
       for (let index = 0; index < this.questionsExt.length; index++) {
-        if(this.questionsExt[index].titleQ !== '' && this.questionsExt[index].questionCategory!==''){
+        if(this.questionsExt[index].titleQ !== ''){
+          console.log('a raha hai')
           await axios.post('/graphql',{
             query: `mutation addQuestion($questionO: String!, $categoryO:String!, $userIdO:String!, $questionaireO:String!){
               addQuestion(question: $questionO , category: $categoryO, user: $userIdO, questionaire: $questionaireO) {
@@ -149,14 +147,14 @@ class CreateQuestionaire extends React.Component {
 
   render() {
     let notifi;
-
+    let listt=[]
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }else if(this.state.err){
       notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
     }
     for (let index = 0; index < this.state.questions.length; index++) {
-      this.listOfQuestions.push(<li key={index} className="list-group-item list-group-item-action list-group-item-secondary">{this.state.questions[index].titleQ}</li>)
+      listt.push(<li key={index} className="list-group-item list-group-item-action list-group-item-secondary"><h6>Question:{index+1}</h6>&nbsp;&nbsp;{this.state.questions[index].titleQ}</li>)
     }
 
     let cardBod;
@@ -165,17 +163,13 @@ class CreateQuestionaire extends React.Component {
                 <div className="form-group">
                 <h6 style={{fontWeight:"bolder", paddingLeft:"3px"}}>Added Questions</h6>
                 <ol className="list-group">
-                  {this.listOfQuestions}
+                  {listt}
                 </ol>       
                 </div>
 
                 <div className="form-group">
                 <input type="text" autoComplete={'off'} className="form-control"  id="questionaireQuestionqq" aria-describedby="helpq" placeholder="Enter Question" onChange={this.handleQuestionaireQuestion}/>
                 <small id="helpq" className="form-text text-muted">Add as many questions as you want</small>
-                </div>
-
-                <div className="form-group">
-                <input type="text" className="form-control" id="questionCategory"  placeholder="Enter Question Category" onChange={this.handleQuestionaireQuestionCategory}/>
                 </div>
                 
                 <div className="form-group">

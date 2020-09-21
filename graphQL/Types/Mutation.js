@@ -387,7 +387,7 @@ const mutation = new GraphQLObjectType({
           type: graphql.GraphQLInt
         },
         user: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         },
         questionaire: {
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)

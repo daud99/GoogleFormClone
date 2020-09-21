@@ -58,7 +58,7 @@ module.exports = new class {
             decodedToken = jwt.verify(token, secret);
         } catch(err) {
             console.log("here2");
-            console.log(e);
+            console.log(err);
             req.isAuth = false;
             return next();
         }
