@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  archived: {
+  verify: {
     type: Boolean,
     default: false,
     required: false
@@ -34,6 +34,12 @@ const UserSchema = new mongoose.Schema({
   },
   age: {
     type: Number
+  },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+      type: Date,
   },
   type: {
     type: String,

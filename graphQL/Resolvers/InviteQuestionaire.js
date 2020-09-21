@@ -146,10 +146,12 @@ export const addInviteQuestionaire = async (parentValue, args, req) => {
       await inviteQuestionaire.save();
      
       // G:/projects/GoogleFormClone/emails/invite-user.htm
-      var template = fs.readFileSync(path.join('emails', 'invite-user.htm'), 'utf-8');
-  
+      var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
         var emailHTML = ejs.render(template, {
-            siteURL: SiteConfig.url
+            siteURL: `${SiteConfig.url}:${SiteConfig.port}/login`,
+            action: 'To open the link, click the following link:',
+            btnText: 'Open Questionarire',
+            message: 'If you do not want to view this questionaire form you can ignore and delete this email'
         });
         try {
         

@@ -40,7 +40,10 @@ const UserType = new GraphQLObjectType({
     _id: {
       type: GraphQLString
     },
-    archived: {
+    resetPasswordToken: {
+      type: GraphQLString
+    },
+    verify: {
       type: GraphQLBoolean,
       defaultValue: false
     },

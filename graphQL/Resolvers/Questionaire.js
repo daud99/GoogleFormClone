@@ -83,10 +83,10 @@ export const editQuestionaire = async (parentValue, args, req) => {
 };
 
 export const deleteQuestionaire = async (parentValue, args, req) => {
-  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  // if(request_invalid) {
-  //   throw request_invalid;
-  // }
+  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  if(request_invalid) {
+    throw request_invalid;
+  }
   try {
     let result = await Questionaire.findOneAndRemove({'_id': args.id});
     if(result) {
@@ -130,10 +130,10 @@ export const deleteAllQuestionaires = async (parentValue, args, req) => {
 };
 
 export const addNewQuestionaire = async (parentValue, args, req) => {
-  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  // if(request_invalid) {
-  //   throw request_invalid;
-  // }
+  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  if(request_invalid) {
+    throw request_invalid;
+  }
   try {
 
     let questionaire = new Questionaire({
@@ -163,18 +163,20 @@ export const addNewQuestionaire = async (parentValue, args, req) => {
 }
 
 export const alertOwnerOnQuestionaireFill = async (parentValue, args, req) => {
-  // const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
-  // if(request_invalid) {
-  //   throw request_invalid;
-  // }
+  const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
+  if(request_invalid) {
+    throw request_invalid;
+  }
   try {
     const questionaire = await Questionaire.findOne({_id: args.questionaireId});
     if(!(questionaire.owner == req.userId)) {
       var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
-
+      
       var emailHTML = ejs.render(template, {
-          siteURL: SiteConfig.url,
-          message: `The ${args.email} user has filled the form ${questionaire.title}`
+          siteURL: `${SiteConfig.url}:${SiteConfig.port}/login`,
+          message: `The ${args.email} user has filled the form ${questionaire.title}`,
+          action: 'To open our site, click the following link:',
+          btnText: 'Open Website'
       });
       try {
 
