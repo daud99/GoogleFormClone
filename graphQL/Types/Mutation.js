@@ -269,7 +269,7 @@ const mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
         },
         senderId: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         },
         receiverId: {
           type: graphql.GraphQLString

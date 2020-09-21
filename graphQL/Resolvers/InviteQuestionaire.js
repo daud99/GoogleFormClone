@@ -123,7 +123,7 @@ export const addInviteQuestionaire = async (parentValue, args, req) => {
       if(!permission || permission == '') {
         const questionaire = await Questionaire.findOne({_id: args.questionaire});
         if(questionaire) {
-          if(questionaire.owner == args.senderId) {
+          if(questionaire.owner == req.userId) {
             permission = 'rw';
           } else {
             permission = 'r';
@@ -138,7 +138,7 @@ export const addInviteQuestionaire = async (parentValue, args, req) => {
       const inviteQuestionaire = new InviteQuestionaire({
         questionaire: args.questionaire,
         invitedUserEmail: args.email,
-        senderId: args.senderId,
+        senderId: req.userId,
         receiverId: args.receiverId,
         status: args.status,
         permission: permission
