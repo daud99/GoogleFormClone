@@ -42,7 +42,7 @@ export const addNewAnswer = async (parentValue, args, req) => {
     }
     try {
       let answer = await Answer.findOne({
-        user: args.user,
+        user: req.userId,
         question: args.question,
         questionaire: args.questionaire
       });
@@ -56,7 +56,7 @@ export const addNewAnswer = async (parentValue, args, req) => {
           dislikes: args.dislikes,
           questionaire: args.questionaire,
           question: args.question,
-          user: args.user
+          user: req.userId
         });
         const questionaire = await Questionaire.findOne({_id: args.questionaire});
         if(questionaire) {
