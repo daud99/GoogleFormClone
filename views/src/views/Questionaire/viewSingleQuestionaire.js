@@ -39,13 +39,21 @@ class ViewQuestionaire extends React.Component {
       selectedUser:'',
 
       userBit:false,
-      submitBit:true
+      submitBit:true,
+      inviteBit:false
     };
     
     this.submitForm = this.submitForm.bind(this);
     this.handleAnswerName = this.handleAnswerName.bind(this);
     this.onUserClick = this.onUserClick.bind(this);
     this.submitFF = this.submitFF.bind(this);
+
+    this.closeInvite = this.closeInvite.bind(this);
+    this.openInvite = this.openInvite.bind(this);
+    this.handleSelectedPermission = this.handleSelectedPermission.bind(this);
+    this.handleInviteEmail = this.handleInviteEmail.bind(this);
+    this.submitInvite = this.submitInvite.bind(this);
+
   }
   questionIdList=[]
   answerList=[]
@@ -54,6 +62,9 @@ class ViewQuestionaire extends React.Component {
 
   submittedAnswersList=[];
   userSelectedAnswerList=[];
+
+  inviteEmail=''
+  invitePermission=''
   componentWillMount() {
     console.log(this.props.match.params)
     const idQ=this.props.match.params.id;
@@ -212,6 +223,44 @@ class ViewQuestionaire extends React.Component {
     this.setState({userBit:false})
     this.setState({submitBit:true})
   }
+
+  closeInvite(){
+    this.setState({inviteBit:false})
+  }
+  openInvite(){
+    this.setState({inviteBit:true})
+  }
+  handleInviteEmail(event){
+    this.inviteEmail=event.target.value
+  }
+  handleSelectedPermission(event){
+    this.invitePermission=event.target.value
+  }
+  // "daudahmed870@gmail.com"
+  async submitInvite(){
+    let result3
+    console.log(this.invitePermission)
+    console.log(this.inviteEmail)
+
+    result3 = await axios.post('/graphql',{
+      query: `mutation inviteUserToFillQuestionaire($questionaireO:String!, $permissionO:String, $emailO:String!){
+        inviteUserToFillQuestionaire(questionaire: $questionaireO,permission:$permissionO, email: $emailO) {
+          msg
+        }
+      }`,
+        variables:{
+          questionaireO:this.questionaireId,
+          emailO:this.inviteEmail,
+          permissionO:this.invitePermission
+        }
+    });
+    if(result3){
+      console.log(result3);
+      this.setState({succes:true});
+      this.setState({succesMsg:'User Invited Successfully'})
+    }
+
+  }
   render() {
     let notifi;
     if(this.state.succes){
@@ -226,6 +275,30 @@ class ViewQuestionaire extends React.Component {
     let divv=[]
     let AnsweredDiv=[]
     let usersList=[]
+
+    let invite
+    if(this.state.inviteBit){
+      invite=<div className="form-group">
+              <input type="email" className="form-control" onChange={(event)=>this.handleInviteEmail(event)} aria-describedby="emailHelp" placeholder="Enter Email"/>
+              <small id="emailHelp" className="form-text text-muted">Enter email to which you want to invite</small>
+
+              <select value={this.invitePermission} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
+                <option selected>Select Permission</option>
+                <option value='r' selected>Read Only</option>
+                <option value='rw' selected>Read and Write</option>
+              </select>
+              <Button color="success" round onClick={this.submitInvite}>
+                Send Invitation
+              </Button>
+              <Button color="success" round onClick={this.closeInvite}>
+                Cancel
+              </Button>
+
+              <hr/>
+            </div>
+    }else if(!this.state.inviteBit){
+      invite=<small></small>
+    }
     for (let index2 = 0; index2 < this.submittedAnswersList.length; index2++) {
       usersList.push(
         <option value={this.submittedAnswersList[index2].uId} key={index2}>{this.submittedAnswersList[index2].userName}</option>
@@ -278,6 +351,10 @@ class ViewQuestionaire extends React.Component {
                   <Button color="warning" round onClick={this.submitFF}>
                     CLICIK TO SUBMIT YOURS
                   </Button>
+                  <Button color="success" round onClick={this.openInvite}>
+                    INVITE OTHERS
+                  </Button><br/><hr/>
+                  {invite}
 
                 </CardBody> 
             </Card>
