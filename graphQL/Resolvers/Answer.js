@@ -47,7 +47,7 @@ export const addNewAnswer = async (parentValue, args, req) => {
         dislikes: args.dislikes,
         questionaire: args.questionaire,
         question: args.question,
-        user: args.user
+        user: req.userId
       });
     
       return await answer.save();

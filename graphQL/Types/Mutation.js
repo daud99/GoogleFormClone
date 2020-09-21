@@ -284,7 +284,7 @@ const mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
         },
         category: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         },
         likes: {
           type: graphql.GraphQLInt
@@ -293,7 +293,7 @@ const mutation = new GraphQLObjectType({
           type: graphql.GraphQLInt
         },
         user: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         },
         questionaire: {
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
