@@ -31,13 +31,14 @@ export const getUserAnswers = async (parentValue, args) => {
   return await Answer.find({'_id': {$in: parentValue.answers}});
 }
 
-export const getUserById = async (parentValue, args, req) => {
+export const getUserById = async (parentValue,args, req) => {
   const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
   if(request_invalid) {
     throw request_invalid;
   }
   let user =  await User.findOne({_id: req.userId});
   user = user.toObject();
+  console.log(user)
   if("password" in user) delete user.password;
   return user;
 }
