@@ -216,19 +216,25 @@ class UserP extends React.Component {
       //   }
       // });
       axios.post('/graphql',{
-        query: `query getUserByID(){
-          getUserByID() {
-                id,
+        query: `query getUserByID($idO:String){
+          getUserByID(id:$idO) {
                 name,
                 email,
-                type,
-                updatedAt
+                updatedAt,
+                type
           }
         }`,
           variables:{
+            $idO:"null"
           }
       }).then((result) => {
-        console.log(result.data.data.getUserByID)
+        console.log(result.data)
+        this.setState({userProfile:result.data.data.getUserByID});
+        this.data.name=result.data.data.getUserByID.name;
+        this.data.email=result.data.data.getUserByID.email;
+        this.setState({userNamep:result.data.data.getUserByID.name,userEmailp:result.data.data.getUserByID.email})
+        this.setState({profilePhotoVar:avatar});
+        this.setState({createdAtV:result.data.data.getUserByID.updatedAt})
       });
       this.setState({"locallogin":true})
       this.setState({"googleLogin":false})
@@ -277,7 +283,10 @@ class UserP extends React.Component {
                 <CardBody profile>
                   <h6 className={classes.cardCategory}>{this.state.nameV}</h6>
                   <h4 className={classes.cardTitle}>{this.state.emailV}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.createdAtV}</p>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt}</p>
+                  <Button color="info" round onClick={()=>this.setImageInpN()}>
+                  {this.state.userProfile.type}
+                  </Button>
                 </CardBody>
               </Card>
             </GridItem>
@@ -311,7 +320,10 @@ class UserP extends React.Component {
                 <CardBody profile>
                   <h6 className={classes.cardCategory}>{this.state.userProfile.name}</h6>
                   <h4 className={classes.cardTitle}>{this.state.userProfile.email}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.createdAt}</p>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt}</p>
+                  <Button color="info" round onClick={()=>this.setImageInpN()}>
+                  {this.state.userProfile.type}
+                  </Button>
                 </CardBody>
               </Card>
             </GridItem>
