@@ -44,6 +44,9 @@ const UserType = new GraphQLObjectType({
       type: GraphQLBoolean,
       defaultValue: false
     },
+    updatedAt:{
+      type:GraphQLString
+    },
     // tokens: [Token]
     questionaires: {
       type: new GraphQLList(QuestionaireType),

@@ -22,9 +22,6 @@ const query = new GraphQLObjectType({
     getUserByID: {
       type: UserType,
       args: {
-        id: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
-        }
       },
       resolve(parentValue, args, req) {
         return userResolvers.getUserById(parentValue, args, req)

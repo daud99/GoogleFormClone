@@ -28,7 +28,7 @@ export const getUserById = async (parentValue, args, req) => {
   if(request_invalid) {
     throw request_invalid;
   }
-  let user =  await User.findOne({_id: args.id});
+  let user =  await User.findOne({_id: req.userId});
   user = user.toObject();
   if("password" in user) delete user.password;
   return user;
