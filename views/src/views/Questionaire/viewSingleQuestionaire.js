@@ -66,6 +66,8 @@ class ViewQuestionaire extends React.Component {
   inviteEmail=''
   invitePermission=''
   componentWillMount() {
+    document.body.style.overflow = "visible";
+
     console.log(this.props.match.params)
     const idQ=this.props.match.params.id;
     let answerQidObj={}
@@ -133,6 +135,7 @@ class ViewQuestionaire extends React.Component {
             this.setState({questions:result.data.data.getQuestionsOfQuestionaire})
           });
       });
+      // window.location.reload(false);
   }
   handleAnswerName = (event,indexL) => {
     let answerObj = {};
@@ -147,64 +150,70 @@ class ViewQuestionaire extends React.Component {
     console.log(this.questionIdList.length);
     let result;
     let result2;
-    for (let index = 0; index < this.questionIdList.length; index++) {
-      if(index<=this.answerList.length){
-      console.log("Index here is "+index)
-      console.log(this.answerList[index]);
-      result = await axios.post('/graphql',{
-        query: `mutation addAnswer($questionaireO: String!, $questionO:String!, $answerO:String!){
-          addAnswer(question: $questionO, questionaire: $questionaireO, answer: $answerO) {
-            id,
-            answer,
-            question{
-              id
-            },
-            questionaire{
-              id
-            }
-          }
-        }`,
-          variables:{
-            questionaireO:this.questionaireId,
-            questionO:this.questionIdList[index],
-            answerO:this.answerList[index].answer
-          }
-      });
-      if(result) {
-        result2 = await axios.post('/graphql',{
-          query: `query alertOwnerOnQuestionaireFill($questionaireIdO:String!, $emailO:String!){
-            alertOwnerOnQuestionaireFill(questionaireId: $questionaireIdO, email: $emailO) {
-              msg
+    if(this.questionIdList.length===this.answerList.length){
+      for (let index = 0; index < this.questionIdList.length; index++) {
+        if(index<=this.answerList.length){
+        console.log("Index here is "+index)
+        console.log(this.answerList[index]);
+        result = await axios.post('/graphql',{
+          query: `mutation addAnswer($questionaireO: String!, $questionO:String!, $answerO:String!){
+            addAnswer(question: $questionO, questionaire: $questionaireO, answer: $answerO) {
+              id,
+              answer,
+              question{
+                id
+              },
+              questionaire{
+                id
+              }
             }
           }`,
             variables:{
-              questionaireIdO:this.questionaireId,
-              emailO:"daudahmed870@gmail.com"
+              questionaireO:this.questionaireId,
+              questionO:this.questionIdList[index],
+              answerO:this.answerList[index].answer
             }
         });
-        if(result2){
-          console.log(result2);
+        if(result) {
+          result2 = await axios.post('/graphql',{
+            query: `query alertOwnerOnQuestionaireFill($questionaireIdO:String!, $emailO:String!){
+              alertOwnerOnQuestionaireFill(questionaireId: $questionaireIdO, email: $emailO) {
+                msg
+              }
+            }`,
+              variables:{
+                questionaireIdO:this.questionaireId,
+                emailO:"daudahmed870@gmail.com"
+              }
+          });
+          if(result2){
+            console.log(result2);
+          }
+          console.log(result);
+          
+          this.setState({succes:true});
+          this.setState({succesMsg:'Answers submited successfully'})
         }
-        console.log(result);
-        
+        // .then((result) => {
+        //   console.log(result)
+        //   this.setState({succes:true})
+        // });
+      }
+      }
+      if(result) {
+        window.scrollTo(0,0)
         this.setState({succes:true});
         this.setState({succesMsg:'Answers submited successfully'})
+        // this.props.history.push('/allQuestionaires')
       }
-      // .then((result) => {
-      //   console.log(result)
-      //   this.setState({succes:true})
-      // });
+    }else{
+      alert('Please fill all Answers')
     }
-    }
-    if(result) {
-      window.scrollTo(0,0)
-      this.setState({succes:true});
-      this.setState({succesMsg:'Answers submited successfully'})
-      // this.props.history.push('/allQuestionaires')
-    }
+    
   }
   onUserClick(event){
     let newObj={}
+    this.userSelectedAnswerList=[]
     for (let index4 = 0; index4 < this.state.questionaires.answers.length; index4++) {
       if(event.target.value==this.state.questionaires.answers[index4].user._id){
         console.log('rrr')
@@ -333,7 +342,7 @@ class ViewQuestionaire extends React.Component {
     
 
     return (
-      <div style={{paddingLeft:'10%', paddingRight:'10%'}}>
+      <div style={{paddingLeft:'10%', paddingRight:'10%', overflowY:"scroll",overflow: "visible"}}>
           {notifi}
           <GridContainer>
           <GridItem xs={12} sm={12} md={12} lg={12}>
@@ -344,7 +353,7 @@ class ViewQuestionaire extends React.Component {
                   
                   <div className="input-group mb-3">
                     <select value={this.state.selectedUser} onChange={this.onUserClick} className="custom-select" id="usersSelect">
-                      <option selected>Select user to view answers</option>
+                      <option>Select user to view answers</option>
                      {usersList}
                     </select>
                   </div>
@@ -360,12 +369,12 @@ class ViewQuestionaire extends React.Component {
             </Card>
             <Card>
                 <CardBody>
-                  {divv}  
-                </CardBody>
+                  {divv}
                   <hr/>
                   <Button color="success" round onClick={this.submitForm}>
                       Submit Form
-                  </Button>
+                  </Button>  
+                </CardBody>
             </Card>
           </GridItem>
           </GridContainer>

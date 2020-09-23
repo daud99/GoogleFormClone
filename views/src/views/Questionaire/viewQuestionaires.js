@@ -127,8 +127,8 @@ class ViewAllQuestionaire extends React.Component {
           {/* <GridItem xs={12} sm={12} md={12} lg={12}> */}
             <Card>
                 <CardBody>
-                <table class="table table-responsive table-hover">
-                  <thead class="thead-dark">
+                <table className="table table-responsive table-hover">
+                  <thead className="thead-dark">
                     <tr className="d-flex">
                       <th scope="col" className="col-1">#</th>
                       <th scope="col" className="col-5">Title</th>
