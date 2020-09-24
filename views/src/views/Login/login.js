@@ -40,11 +40,18 @@ class Login extends Component {
       },
       email:'',
       password:'',
+
+      resetPassAllow:false,
       succes:false,
       succesMsg:'',
       errr:false,
       errrMsg:''
     };
+    this.resetPasswordAllow = this.resetPasswordAllow.bind(this);
+    this.resetPasswordDissAllow = this.resetPasswordDissAllow.bind(this);
+
+    this.resetPass = this.resetPass.bind(this);
+
   }
 
   componentDidMount() {
@@ -59,9 +66,13 @@ class Login extends Component {
       console.log('Not LoggedIN');
     }
   }
+  resetEmail=''
   data={email:'',password:''}
   handleEmail = event => {
     this.data.email= event.target.value;
+  }
+  handleEmailReset = event => {
+    this.resetEmail= event.target.value;
   }
   handlePassword1 = event => {
     this.data.password= event.target.value;
@@ -263,7 +274,53 @@ class Login extends Component {
     this.setState({succes:false});
     this.setState({errrMsg:'Something went wrong'});
   }
-  
+  resetPasswordAllow(){
+    this.setState({resetPassAllow:true})
+  }
+  resetPasswordDissAllow(){
+    this.setState({resetPassAllow:false})
+  }
+  resetPass(){
+    if(this.resetEmail==''){
+      alert("PLEASE WRITE EMAIL")
+    }else{
+      console.log(this.resetEmail)
+      let q = `mutation {
+        sendRecoveryEmail(email: "${this.resetEmail}")
+           {
+              msg
+          }
+          }`;
+          axios.post('/graphql',{
+          query: q
+          }).then((result) => {
+          console.log(result.data)
+          if(result.data.data.sendRecoveryEmail) {
+              if(result.data.data.sendRecoveryEmail.msg) {
+              this.setState({errr:false});
+              this.setState({succes:true});
+              this.setState({succesMsg:result.data.data.sendRecoveryEmail.msg});
+              setTimeout(() => {
+                  this.props.history.push(`/login`)
+              }, 1000)
+              }
+          }
+          else if(result.data.errors) {
+              if(result.data.errors[0].message){
+              this.setState({errr:true});
+              this.setState({succes:false});
+              this.setState({errrMsg:result.data.errors[0].message});
+              }
+              else{
+              this.setState({errr:true});
+              this.setState({succes:false});
+              this.setState({errrMsg:"Something went wrong"});
+              }
+              
+          }
+          });
+    }
+  }
   render() {
     makeStyles(this.state.styles);
     let notifi;
@@ -272,6 +329,45 @@ class Login extends Component {
     }else if(this.state.errr){
       notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
+
+    let logInTo;
+
+    if(this.state.resetPassAllow){
+      logInTo=<CardBody profile>
+                <div className="form-group">
+                  <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmailReset}/>
+                  <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <Button color="success" round onClick={this.resetPass}>
+                    SEND REQUEST TO RESET
+                </Button>
+                <Button color="danger" round onClick={this.resetPasswordDissAllow}>
+                    CANCEL
+                </Button>
+
+            </CardBody>
+    }else{
+      logInTo=<CardBody profile>
+                <div className="form-group">
+                  <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
+                  <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div className="form-group">
+                  <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
+                </div>
+                <Button color="success" round onClick={this.loginMethod}>
+                    Login
+                </Button>
+                <Button color="warning" round onClick={this.resetPasswordAllow}>
+                    FORGOT PASSWORD
+                </Button>
+                <small id="emailHelp" className="form-text text-muted">Dont have an account? SingUp here.</small>
+                <Button color="primary" round component={Link} to="/signup">
+                    SignUp
+                </Button> 
+            </CardBody>
+    }
+
     return (
       <div className="container-fluid" style={{paddingTop: '70px'}}>
         {notifi}<br/>
@@ -281,22 +377,7 @@ class Login extends Component {
               <CardAvatar profile>
                 <img src={avatar} alt="..." />
               </CardAvatar>
-              <CardBody profile>
-                  <div className="form-group">
-                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
-                    <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                  </div>
-                  <div className="form-group">
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
-                  </div>
-                  <Button color="success" round onClick={this.loginMethod}>
-                      Login
-                  </Button>
-                  <small id="emailHelp" className="form-text text-muted">Dont have an account? SingUp here.</small>
-                  <Button color="primary" round component={Link} to="/signup">
-                      SignUp
-                  </Button> 
-              </CardBody>
+              {logInTo}
               <CardBody profile style={{backgroundColor:"rgb(95, 158, 160)"}}>
               <GoogleLogin
                 clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"

@@ -224,7 +224,7 @@ export const sendRecoveryEmail = async (parentValue, args) => {
   var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
 
   var emailHTML = ejs.render(template, {
-      siteURL: `${SiteConfig.url}:${SiteConfig.port}/reset-password?token=${user.resetPasswordToken}`,
+      siteURL: `${SiteConfig.url}:${SiteConfig.port}/reset-password/${user.resetPasswordToken}`,
       action: 'To reset the password, click the following link:',
       btnText: 'Reset Password',
       message: 'If you do not requested the password change,you can ignore and delete this email'
@@ -270,8 +270,7 @@ export const updateRecoverPassword = async (parentValue, args) => {
   if(!user) {
     return new Error("Could not find active user by the token.");
   }
-
-  user.password = await this.hashPassword(args.newPassword);
+  user.password = await bcrypt.hash(args.newPassword, 12);
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   user.save();
