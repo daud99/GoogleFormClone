@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { withRouter } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
+import PropTypes from "prop-types";
 
 
 // @material-ui/core components
@@ -179,6 +180,8 @@ const mapPropsToDispatch = dispatch => {
     onUserTypeGet: (usertype)=> dispatch({type: 'SEUSERTYPE', usertype})
   }
 }
-
+AdminNavbarLinks.defaultProps = {
+  input: PropTypes.isNotNull // you can amend this accordingly
+}
 
 export default connect(null, mapPropsToDispatch)(withRouter(AdminNavbarLinks))
