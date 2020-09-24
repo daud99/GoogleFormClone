@@ -116,11 +116,19 @@ class Login extends Component {
             this.setState({succes:false});
             this.setState({errrMsg:"Error logging in!"});
           }
-        } else {
-          this.setState({errr:true});
-          this.setState({succes:false});
-          this.setState({errrMsg:"Error logging in!"});
-        }
+        } else if(res.data.errors) {
+          if(res.data.errors[0].message){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:res.data.errors[0].message});
+          }
+          else{
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:"Something went wrong"});
+          }
+          
+      }
        
       });
     //   axios.post('/user/login', user)

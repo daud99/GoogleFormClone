@@ -29,6 +29,7 @@ import 'jquery/src/jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import Emailverify from "./views/SingUp/emailVerify";
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 import SingUp from "./views/SingUp/singup.js";
 
@@ -54,6 +55,7 @@ ReactDOM.render(
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SingUp} />
           <Route path="/questionaire/:id" component={ViewQuestionaire} />
+          <Route path="/verify-user/:token" component={Emailverify} />
           {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
           {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />} */}
           <Redirect from="/" to="/l/dashboard" />

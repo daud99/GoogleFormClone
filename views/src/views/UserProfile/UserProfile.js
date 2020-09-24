@@ -346,9 +346,10 @@ class UserP extends React.Component {
                   <div className="form-group">
                     <input type="password" className="form-control" id="exampleInputPassword2" placeholder="Retype Password" onChange={this.handlePassword2}/>
                   </div> */}
-                  <Button color="success" onClick={this.register}>
+                  
+                  {/* <Button color="success" onClick={this.register}>
                       Update
-                  </Button>
+                  </Button> */}
                 </CardBody>
               </Card>
             </GridItem>
