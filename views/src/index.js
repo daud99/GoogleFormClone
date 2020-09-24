@@ -32,7 +32,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Emailverify from "./views/SingUp/emailVerify";
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 import SingUp from "./views/SingUp/singup.js";
-
+import passwordReset from "./views/SingUp/passwordReset";
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
@@ -56,6 +56,7 @@ ReactDOM.render(
           <Route path="/signup" component={SingUp} />
           <Route path="/questionaire/:id" component={ViewQuestionaire} />
           <Route path="/verify-user/:token" component={Emailverify} />
+          <Route path="/reset-password/:token" component={passwordReset} />
           {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
           {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />} */}
           <Redirect from="/" to="/l/dashboard" />

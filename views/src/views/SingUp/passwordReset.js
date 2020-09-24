@@ -13,7 +13,7 @@ import CardBody from "components/Card/CardBody.js";
 import axios from '../../axiosSet';
 
 
-class Emailverify extends Component {
+class passwordReset extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,6 +43,8 @@ class Emailverify extends Component {
     this.verifyE = this.verifyE.bind(this);
   }
   tokenE="";
+  data={password:'',password2:''}
+
   componentDidMount() {
     if(localStorage.getItem('token')){
       console.log('Token found.')
@@ -61,37 +63,52 @@ class Emailverify extends Component {
   }
   verifyE(){
     console.log(this.tokenE)
-    // });
-    let q = `mutation {
-        verifyUser(token: "${this.tokenE}") {
-        msg
-    }
-    }`;
-    axios.post('/graphql',{
-    query: q
-    }).then((result) => {
-    console.log(result.data)
-    if(result.data.data.verifyUser) {
-        if(result.data.data.verifyUser.msg) {
-        this.setState({errr:false});
-        this.setState({succes:true});
-        this.setState({succesMsg:result.data.data.verifyUser.msg});
+    if(this.data.password!=this.data.password2){
+        alert("BOTH PASSWORDS DIDNOT MATCH")
+    }else if(this.data.password2=='' || this.data.password==''){
+        alert("MUST FILL BOTH FIELDS")
+    }else{
+        let q = `mutation {
+            updateRecoverPassword(token: "${this.tokenE}", newPassword:"${this.data.password}") {
+            msg
         }
-    }
-    else if(result.data.errors) {
-        if(result.data.errors[0].message){
-        this.setState({errr:true});
-        this.setState({succes:false});
-        this.setState({errrMsg:result.data.errors[0].message});
+        }`;
+        axios.post('/graphql',{
+        query: q
+        }).then((result) => {
+        console.log(result.data)
+        if(result.data.data.updateRecoverPassword) {
+            if(result.data.data.updateRecoverPassword.msg) {
+            this.setState({errr:false});
+            this.setState({succes:true});
+            this.setState({succesMsg:result.data.data.updateRecoverPassword.msg});
+            setTimeout(() => {
+                this.props.history.push(`/login`)
+            }, 1000)
+            }
         }
-        else{
-        this.setState({errr:true});
-        this.setState({succes:false});
-        this.setState({errrMsg:"Something went wrong"});
+        else if(result.data.errors) {
+            if(result.data.errors[0].message){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:result.data.errors[0].message});
+            }
+            else{
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:"Something went wrong"});
+            }
+            
         }
-        
+        });
     }
-    });
+    
+  }
+  handlePassword1 = event => {
+    this.data.password= event.target.value;
+  }
+  handlePassword2 = event => {
+    this.data.password2= event.target.value;
   }
   render() {
     makeStyles(this.state.styles);
@@ -108,9 +125,17 @@ class Emailverify extends Component {
           <div className="col-lg-6 col-md-6 col-sm-12 offset-lg-3 offset-md-3">
             <Card profile>
               <CardBody profile>
-                <Button color="success" onClick={this.verifyE}>
-                      Click to verify
-                </Button>
+                <div className="form-group">
+                    <div className="form-group">
+                    <input type="password" className="form-control" autoComplete="off" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
+                    </div>
+                    <div className="form-group">
+                    <input type="password" className="form-control" autoComplete="off" id="exampleInputPassword2" placeholder="Retype Password" onChange={this.handlePassword2}/>
+                    </div>
+                    <Button color="success" onClick={this.verifyE}>
+                        RESET PASSWORD
+                    </Button>
+                </div>
               </CardBody>
             </Card>
           </div>
@@ -121,4 +146,4 @@ class Emailverify extends Component {
 }
 
 
-export default Emailverify
+export default passwordReset
