@@ -84,6 +84,42 @@ const mutation = new GraphQLObjectType({
         return userResolvers.deleteUser(parentValue, args, req);
       }
     },
+    sendRecoveryEmail: {
+      type: StandardType,
+      args: {
+        email: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve(parentValue, args) {
+        return userResolvers.sendRecoveryEmail(parentValue, args);
+      }
+    },
+    updateRecoverPassword: {
+      type: StandardType,
+      args: {
+        token: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        },
+        newPassword: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve(parentValue, args) {
+        return userResolvers.updateRecoverPassword(parentValue, args);
+      }
+    },
+    verifyUser: {
+      type: StandardType,
+      args: {
+        token: {
+          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+        }
+      },
+      resolve(parentValue, args) {
+        return userResolvers.verifyUser(parentValue, args);
+      }
+    },
     addQuestionaire: {
       type: QuestionaireType,
       args: {

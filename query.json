@@ -292,3 +292,13 @@ query {
     id
   }
 }
+
+/*
+  For email/account verification
+*/
+
+mutation {
+  verifyUser(token: "KLQwjaMtQkt6wh8M7Q8mSqg5UY89FpLl") {
+    msg
+  }
+}

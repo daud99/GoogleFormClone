@@ -26,8 +26,8 @@ async function ignite() {
             pretty: true
         }));
 
-        app.listen(siteConfig.port, () => {
-            console.log(`SocDash active at ${siteConfig.port}!`);
+        app.listen(siteConfig.serverPort, () => {
+            console.log(`SocDash active at ${siteConfig.serverPort}!`);
         });
     }
     catch (e) {
