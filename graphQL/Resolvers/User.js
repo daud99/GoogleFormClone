@@ -104,7 +104,7 @@ export const addUser = async (parentValue, args) => {
     var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
 
     var emailHTML = ejs.render(template, {
-        siteURL: `${SiteConfig.url}:${SiteConfig.port}/verify-user?token=${user.resetPasswordToken}`,
+        siteURL: `${SiteConfig.url}:${SiteConfig.port}/verify-user/${user.resetPasswordToken}`,
         action: 'To verify account, click the following link:',
         btnText: 'Account Verification',
         message: 'If you do not signed up on our site,you can ignore and delete this email.'
