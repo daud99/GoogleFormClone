@@ -86,6 +86,7 @@ export const deleteUser = async (parentValue, args, req) => {
 export const addUser = async (parentValue, args) => {
   try {
     var u = await User.findOne({email: args.email});
+    console.log(u)
     if(u) {
       return new Error('User exist already');
     }

@@ -22,13 +22,21 @@ export default function Header(props) {
   const classes = useStyles();
   function makeBrand() {
     var name;
+    
     props.routes.map(prop => {
+      console.log("above")
+      console.log(prop)
+      console.log("below")
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         name = props.rtlActive ? prop.rtlName : prop.name;
       }
       return null;
     });
-    return name;
+    if(name){
+      return name;
+    }else{
+      window.location.reload(false)
+    }
   }
   const { color } = props;
   const appBarClasses = classNames({
@@ -48,7 +56,7 @@ export default function Header(props) {
         </Hidden>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={classes.title}>
+          <Button color="transparent" className={classes.title}>
             {makeBrand()}
           </Button>
         </div>
@@ -59,7 +67,9 @@ export default function Header(props) {
     </AppBar>
   );
 }
-
+Header.defaultProps = {
+  input: PropTypes.isNotNull // you can amend this accordingly
+}
 Header.propTypes = {
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
   rtlActive: PropTypes.bool,

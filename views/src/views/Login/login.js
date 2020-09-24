@@ -110,7 +110,7 @@ class Login extends Component {
 
                   setTimeout(() => {
                     this.props.history.push(`/admin/dashboard`)
-                  }, 500)
+                  }, 700)
           } else {
             this.setState({errr:true});
             this.setState({succes:false});

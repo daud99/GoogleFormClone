@@ -107,8 +107,9 @@ class SignUp extends React.Component {
       axios.post('/graphql',{
         query: q
       }).then((result) => {
-        if("addUser" in result.data.data) {
-          if("email" in result.data.data.addUser) {
+        console.log(result.data)
+        if(result.data.data.addUser) {
+          if(result.data.data.addUser.email) {
             this.setState({errr:false});
             this.setState({succes:true});
             this.setState({succesMsg:"You are sign up successfully"});
@@ -119,12 +120,21 @@ class SignUp extends React.Component {
             setTimeout(() => {
               this.props.history.push(`/login`)
             }, 500)
-          } else {
-               this.setState({errr:true});
-               this.setState({succes:false});
-              this.setState({errrMsg:"Error signing up"});
           }
         }
+        else if(result.data.errors) {
+          if(result.data.errors[0].message){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:result.data.errors[0].message});
+          }
+          else{
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:"Something went wrong"});
+          }
+          
+      }
       });
     });
   }
