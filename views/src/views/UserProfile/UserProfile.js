@@ -44,6 +44,7 @@ class UserP extends React.Component {
       nameV:'',
       emailV:'',
       createdAtV:'',
+      typeV:'',
       password:'',
       password2:'',
       succes:false,
@@ -193,11 +194,11 @@ class UserP extends React.Component {
       if(localStorage.getItem('createdAt')){
         this.setState({"createdAtV":localStorage.getItem('createdAt')})
       }
-      if(localStorage.getItem('photo')){
-        this.setState({"profilePhotoVar":localStorage.getItem('photo')})
-      }else{
-        this.setState({"profilePhotoVar":avatar})
+      if(localStorage.getItem('type')){
+        this.setState({"typeV":localStorage.getItem('type')})
       }
+
+      this.setState({"profilePhotoVar":avatar})
       this.setState({"gooleLogin":true});
       this.setState({"locallogin":false})
     }
@@ -283,9 +284,9 @@ class UserP extends React.Component {
                 <CardBody profile>
                   <h6 className={classes.cardCategory}>{this.state.nameV}</h6>
                   <h4 className={classes.cardTitle}>{this.state.emailV}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt}</p>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt || this.state.createdAtV}</p>
                   <Button color="info" round onClick={()=>this.setImageInpN()}>
-                  {this.state.userProfile.type}
+                  {this.state.userProfile.type||this.state.typeV}
                   </Button>
                 </CardBody>
               </Card>
