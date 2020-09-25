@@ -126,6 +126,17 @@ const query = new GraphQLObjectType({
         return questionaireResolvers.alertOwnerOnQuestionaireFill(parentValue, args, req)
       }
     },
+    getInviteQuestionaireById: {
+      type: InviteQuestionaireType,
+      args:{
+        id:{
+          type: graphql.GraphQLString
+        }
+      },
+      resolve(parentValue, args, req) {
+        return inviteQuestionaireResolvers.getInviteQuestionaireById(parentValue, args, req)
+      }
+    },
     getInviteQuestionaireForReceiver: {
       type: GraphQLList(InviteQuestionaireType),
       args:{

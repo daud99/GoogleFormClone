@@ -42,6 +42,7 @@ export const getInviteQuestionaireById = async (parentValue, args, req) => {
   if(request_invalid) {
     throw request_invalid;
   }
+  console.log(args.id)
   return await InviteQuestionaire.findOne({_id: args.id});
 }
 

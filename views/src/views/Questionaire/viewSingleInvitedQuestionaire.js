@@ -7,7 +7,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 
-class ViewQuestionaire extends React.Component {
+class ViewInvitedQuestionaire extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +42,9 @@ class ViewQuestionaire extends React.Component {
       
       userBit:false,
       submitBit:true,
-      inviteBit:false
+      inviteBit:false,
+
+      rwBit:false
     };
     
     this.submitForm = this.submitForm.bind(this);
@@ -74,27 +76,39 @@ class ViewQuestionaire extends React.Component {
     let answerQidObj={}
     this.questionaireId=this.props.match.params.id;
     axios.post('/graphql',{
-        query: `query getQuestionaireByID($IdO:String!){
-            getQuestionaireByID(id: $IdO) {
+        query: `query getInviteQuestionaireById($IdO:String!){
+            getInviteQuestionaireById(id: $IdO) {
                 id,
-                title,
-                category,
-                createdAt,
-                owner{
-                  _id,
-                  type
+                invitedUserEmail,
+                status,
+                permission,
+                questionaire{
+                    id,
+                    title,
+                    category,
+                    createdAt,
+                    answers {
+                        answer
+                        question{
+                          id
+                          question
+                        }
+                        user {
+                          _id
+                          email
+                          name
+                        }
+                      }
                 },
-                answers {
-                  answer
-                  question{
-                    id
-                    question
-                  }
-                  user {
+                senderId{
                     _id
                     email
                     name
-                  }
+                },
+                receiverId{
+                    _id
+                    email
+                    name
                 }
           }
         }`,
@@ -108,26 +122,26 @@ class ViewQuestionaire extends React.Component {
           this.setState({succes:false});
           this.setState({errrMsg:result.data.errors[0].message});
           }
-          else{
-          this.setState({errr:true});
-          this.setState({succes:false});
-          this.setState({errrMsg:"Something went wrong"});
-          }
           
-        }else if(result.data.data.getQuestionaireByID){
-          this.setState({questionaires:result.data.data.getQuestionaireByID})
-          console.log(result.data.data.getQuestionaireByID)
-          if(result.data.data.getQuestionaireByID.owner._id==localStorage.getItem("useId")){
+        }else if(result.data.data.getInviteQuestionaireById){
+          this.setState({questionaires:result.data.data.getInviteQuestionaireById})
+          console.log(result.data.data.getInviteQuestionaireById)
+          if(this.state.questionaires.permission=='rw'){
+            this.setState({rwBit:true})
+          }else{
+            this.setState({rwBit:false})
+          }
+          if(result.data.data.getInviteQuestionaireById.receiverId._id==localStorage.getItem("useId")){
             this.setState({isowner:true})
           }else{
             this.setState({isowner:false})
           }
-          for (let index1 = 0; index1 < result.data.data.getQuestionaireByID.answers.length; index1++) {
+          for (let index1 = 0; index1 < result.data.data.getInviteQuestionaireById.questionaire.answers.length; index1++) {
             answerQidObj={}
-            answerQidObj.answer=result.data.data.getQuestionaireByID.answers[index1].answer
-            answerQidObj.qId=result.data.data.getQuestionaireByID.answers[index1].question.id
-            answerQidObj.uId=result.data.data.getQuestionaireByID.answers[index1].user._id
-            answerQidObj.userName=result.data.data.getQuestionaireByID.answers[index1].user.name
+            answerQidObj.answer=result.data.data.getInviteQuestionaireById.questionaire.answers[index1].answer
+            answerQidObj.qId=result.data.data.getInviteQuestionaireById.questionaire.answers[index1].question.id
+            answerQidObj.uId=result.data.data.getInviteQuestionaireById.questionaire.answers[index1].user._id
+            answerQidObj.userName=result.data.data.getInviteQuestionaireById.questionaire.answers[index1].user.name
             if(this.submittedAnswersList.length>0){
               for (let index3 = 0; index3 < this.submittedAnswersList.length; index3++) {
                 if(answerQidObj.uId!=this.submittedAnswersList[index3].uId){
@@ -150,7 +164,7 @@ class ViewQuestionaire extends React.Component {
                 }
               }`,
                 variables:{
-                  IdOO:result.data.data.getQuestionaireByID.id
+                  IdOO:result.data.data.getInviteQuestionaireById.questionaire.id
                 }
             }).then((result) => {
               this.setState({questions:result.data.data.getQuestionsOfQuestionaire})
@@ -189,21 +203,51 @@ class ViewQuestionaire extends React.Component {
               answerO:this.answerList[index].answer
             }
         });
+        console.log(result.data.errors[0].message)
         if(result) {
-          result2 = await axios.post('/graphql',{
-            query: `query alertOwnerOnQuestionaireFill($questionaireIdO:String!, $emailO:String!){
-              alertOwnerOnQuestionaireFill(questionaireId: $questionaireIdO, email: $emailO) {
-                msg
+          if(result.data.errors) {
+            if(result.data.errors[0].message){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:result.data.errors[0].message});
+            }
+            else{
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:"Something went wrong"});
+            }
+            
+          }else{
+            result2 = await axios.post('/graphql',{
+              query: `query alertOwnerOnQuestionaireFill($questionaireIdO:String!, $emailO:String!){
+                alertOwnerOnQuestionaireFill(questionaireId: $questionaireIdO, email: $emailO) {
+                  msg
+                }
+              }`,
+                variables:{
+                  questionaireIdO:this.questionaireId,
+                  emailO:"daudahmed870@gmail.com"
+                }
+            });
+            if(result2.data.errors) {
+              if(result.data.errors[0].message){
+              this.setState({errr:true});
+              this.setState({succes:false});
+              this.setState({errrMsg:result.data.errors[0].message});
               }
-            }`,
-              variables:{
-                questionaireIdO:this.questionaireId,
-                emailO:"daudahmed870@gmail.com"
+              else{
+              this.setState({errr:true});
+              this.setState({succes:false});
+              this.setState({errrMsg:"Something went wrong"});
               }
-          });
+              
+            }else{
+              this.setState({succes:true});
+              this.setState({succesMsg:'Answers submited successfully'})
+            }
+            
+          }
           
-          this.setState({succes:true});
-          this.setState({succesMsg:'Answers submited successfully'})
         }
         // .then((result) => {
         //   console.log(result)
@@ -284,8 +328,10 @@ class ViewQuestionaire extends React.Component {
       notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
     }
     // for (let index = 0; index < this.state.questionaires.length; index++) {
-    
+
     // }
+
+    
     this.questionIdList=[]
     let divv=[]
     let AnsweredDiv=[]
@@ -328,7 +374,8 @@ class ViewQuestionaire extends React.Component {
         <option value={this.submittedAnswersList[index2].uId} key={index2}>{this.submittedAnswersList[index2].userName}</option>
       )
     }
-    if(this.state.submitBit){
+    if(this.state.submitBit && this.state.questionaires.permission=='rw'){
+      // this.setState({rwBit:true})
       this.questionIdList=[]
       for (let index = 0; index < this.state.questions.length; index++) {
         this.questionIdList.push(this.state.questions[index].id)
@@ -353,8 +400,32 @@ class ViewQuestionaire extends React.Component {
             </div>
         )      
       }
+    }else if(this.state.questionaires.permission=='r'){
+      // this.setState({rwBit:false})
+        this.questionIdList=[]
+        for (let index = 0; index < this.userSelectedAnswerList.length; index++) {
+          this.questionIdList.push(this.userSelectedAnswerList[index].queId)
+          divv.push(
+              <div className="form-group" key={index}>
+                <h4 style={{fontWeight:"bolder", textAlign:"left"}}>Question&nbsp;{index+1})&nbsp;&nbsp;{this.userSelectedAnswerList[index].queName}</h4>
+                <hr/>
+              </div>
+          )      
+        }
     }
-    
+    let subButton;
+    let sendBut;
+    if(this.state.rwBit){
+      subButton=<Button color="warning" round onClick={this.submitFF}>
+                CLICIK TO SUBMIT YOURS
+              </Button>
+      sendBut=<Button color="success" round onClick={this.submitForm}>
+                Submit Form
+            </Button>
+    }else{
+      subButton=<small></small>
+      sendBut=<small></small>
+    }
 
     return (
       <div style={{paddingLeft:'10%', paddingRight:'10%', overflowY:"scroll",overflow: "visible"}}>
@@ -372,9 +443,7 @@ class ViewQuestionaire extends React.Component {
                      {usersList}
                     </select>
                   </div>
-                  <Button color="warning" round onClick={this.submitFF}>
-                    CLICIK TO SUBMIT YOURS
-                  </Button>
+                  {subButton}
                   {inviteButton}
                   <br/><hr/>
                   {invite}
@@ -385,9 +454,7 @@ class ViewQuestionaire extends React.Component {
                 <CardBody>
                   {divv}
                   <hr/>
-                  <Button color="success" round onClick={this.submitForm}>
-                      Submit Form
-                  </Button>  
+                  {sendBut} 
                 </CardBody>
             </Card>
           </GridItem>
@@ -398,4 +465,4 @@ class ViewQuestionaire extends React.Component {
 }
 
 
-export default ViewQuestionaire
+export default ViewInvitedQuestionaire

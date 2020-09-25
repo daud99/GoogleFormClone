@@ -35,7 +35,7 @@ import SingUp from "./views/SingUp/singup.js";
 import passwordReset from "./views/SingUp/passwordReset";
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-
+import ViewInvitedQuestionaire from "./views/Questionaire/viewSingleInvitedQuestionaire"
 // Local imports
 import reducer from './store/reducer';
 
@@ -55,6 +55,7 @@ ReactDOM.render(
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SingUp} />
           <Route path="/questionaire/:id" component={ViewQuestionaire} />
+          <Route path="/invitedQuestionaire/:id" component={ViewInvitedQuestionaire} />
           <Route path="/verify-user/:token" component={Emailverify} />
           <Route path="/reset-password/:token" component={passwordReset} />
           {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
