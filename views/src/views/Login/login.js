@@ -281,12 +281,11 @@ class Login extends Component {
     this.setState({resetPassAllow:false})
   }
   resetPass(){
-    if(this.resetEmail==''){
+    if(this.resetEmail=='' && !document.getElementById('exampleInputEmail1').value){
       alert("PLEASE WRITE EMAIL")
     }else{
-      console.log(this.resetEmail)
       let q = `mutation {
-        sendRecoveryEmail(email: "${this.resetEmail}")
+        sendRecoveryEmail(email: "${this.resetEmail || document.getElementById('exampleInputEmail1').value}")
            {
               msg
           }
@@ -335,7 +334,15 @@ class Login extends Component {
     if(this.state.resetPassAllow){
       logInTo=<CardBody profile>
                 <div className="form-group">
-                  <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmailReset}/>
+                  <input 
+                    type="email" 
+                    className="form-control" 
+                    id="exampleInputEmail1" 
+                    aria-describedby="emailHelp" 
+                    placeholder="Enter email" 
+                    onChange={this.handleEmailReset}
+                    
+                  />
                   <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <Button color="success" round onClick={this.resetPass}>
