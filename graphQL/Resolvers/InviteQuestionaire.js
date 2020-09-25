@@ -28,7 +28,7 @@ export const getInviteQuestionaireReceiver = async (parentValue, args) => {
     return user;
   }
 
-  export const getInviteQuestionaireForReceiver = async (parentValue, args) => {
+  export const getInviteQuestionaireForReceiver = async (parentValue, args,req) => {
     const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
     if(request_invalid) {
       throw request_invalid;

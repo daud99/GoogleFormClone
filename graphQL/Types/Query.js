@@ -128,6 +128,11 @@ const query = new GraphQLObjectType({
     },
     getInviteQuestionaireForReceiver: {
       type: GraphQLList(InviteQuestionaireType),
+      args:{
+        receiverId:{
+          type: graphql.GraphQLString
+        }
+      },
       resolve(parentValue, args, req) {
         return inviteQuestionaireResolvers.getInviteQuestionaireForReceiver(parentValue, args, req)
       }

@@ -24,9 +24,6 @@ export default function Header(props) {
     var name;
     
     props.routes.map(prop => {
-      console.log("above")
-      console.log(prop)
-      console.log("below")
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         name = props.rtlActive ? prop.rtlName : prop.name;
       }

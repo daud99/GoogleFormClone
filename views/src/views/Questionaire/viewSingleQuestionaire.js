@@ -38,6 +38,8 @@ class ViewQuestionaire extends React.Component {
       err:false,
       selectedUser:'',
 
+      isowner:false,
+      
       userBit:false,
       submitBit:true,
       inviteBit:false
@@ -60,6 +62,7 @@ class ViewQuestionaire extends React.Component {
   questionaireId=''
   usersL=[];
 
+ 
   submittedAnswersList=[];
   userSelectedAnswerList=[];
 
@@ -67,8 +70,6 @@ class ViewQuestionaire extends React.Component {
   invitePermission=''
   componentWillMount() {
     document.body.style.overflow = "visible";
-
-    console.log(this.props.match.params)
     const idQ=this.props.match.params.id;
     let answerQidObj={}
     this.questionaireId=this.props.match.params.id;
@@ -79,6 +80,10 @@ class ViewQuestionaire extends React.Component {
                 title,
                 category,
                 createdAt,
+                owner{
+                  _id,
+                  type
+                },
                 answers {
                   answer
                   question{
@@ -97,44 +102,60 @@ class ViewQuestionaire extends React.Component {
             IdO:idQ
           }
       }).then((result) => {
-        this.setState({questionaires:result.data.data.getQuestionaireByID})
-        console.log(result.data.data.getQuestionaireByID)
-        for (let index1 = 0; index1 < result.data.data.getQuestionaireByID.answers.length; index1++) {
-          answerQidObj={}
-          answerQidObj.answer=result.data.data.getQuestionaireByID.answers[index1].answer
-          answerQidObj.qId=result.data.data.getQuestionaireByID.answers[index1].question.id
-          answerQidObj.uId=result.data.data.getQuestionaireByID.answers[index1].user._id
-          answerQidObj.userName=result.data.data.getQuestionaireByID.answers[index1].user.name
-          if(this.submittedAnswersList.length>0){
-            for (let index3 = 0; index3 < this.submittedAnswersList.length; index3++) {
-              if(answerQidObj.uId!=this.submittedAnswersList[index3].uId){
-                this.submittedAnswersList.push(answerQidObj)
-              }
-            }
+        if(result.data.errors) {
+          if(result.data.errors[0].message){
+          this.setState({errr:true});
+          this.setState({succes:false});
+          this.setState({errrMsg:result.data.errors[0].message});
           }
           else{
-            this.submittedAnswersList.push(answerQidObj)
+          this.setState({errr:true});
+          this.setState({succes:false});
+          this.setState({errrMsg:"Something went wrong"});
           }
           
-        }
-        console.log(this.submittedAnswersList)
-        axios.post('/graphql',{
-            query: `query getQuestionsOfQuestionaire($IdOO:String!){
-                getQuestionsOfQuestionaire(idp: $IdOO) {
-                    id,
-                    question,
-                    category,
-                    createdAt
+        }else if(result.data.data.getQuestionaireByID){
+          this.setState({questionaires:result.data.data.getQuestionaireByID})
+          console.log(result.data.data.getQuestionaireByID)
+          if(result.data.data.getQuestionaireByID.owner._id==localStorage.getItem("useId")){
+            this.setState({isowner:true})
+          }else{
+            this.setState({isowner:false})
+          }
+          for (let index1 = 0; index1 < result.data.data.getQuestionaireByID.answers.length; index1++) {
+            answerQidObj={}
+            answerQidObj.answer=result.data.data.getQuestionaireByID.answers[index1].answer
+            answerQidObj.qId=result.data.data.getQuestionaireByID.answers[index1].question.id
+            answerQidObj.uId=result.data.data.getQuestionaireByID.answers[index1].user._id
+            answerQidObj.userName=result.data.data.getQuestionaireByID.answers[index1].user.name
+            if(this.submittedAnswersList.length>0){
+              for (let index3 = 0; index3 < this.submittedAnswersList.length; index3++) {
+                if(answerQidObj.uId!=this.submittedAnswersList[index3].uId){
+                  this.submittedAnswersList.push(answerQidObj)
+                }
               }
-            }`,
-              variables:{
-                IdOO:result.data.data.getQuestionaireByID.id
-              }
-          }).then((result) => {
-            console.log(result.data.data.getQuestionsOfQuestionaire)
-            this.setState({questions:result.data.data.getQuestionsOfQuestionaire})
-          });
-      });
+            }
+            else{
+              this.submittedAnswersList.push(answerQidObj)
+            }
+            
+          }
+          axios.post('/graphql',{
+              query: `query getQuestionsOfQuestionaire($IdOO:String!){
+                  getQuestionsOfQuestionaire(idp: $IdOO) {
+                      id,
+                      question,
+                      category,
+                      createdAt
+                }
+              }`,
+                variables:{
+                  IdOO:result.data.data.getQuestionaireByID.id
+                }
+            }).then((result) => {
+              this.setState({questions:result.data.data.getQuestionsOfQuestionaire})
+            });
+      }});
       // window.location.reload(false);
   }
   handleAnswerName = (event,indexL) => {
@@ -144,17 +165,11 @@ class ViewQuestionaire extends React.Component {
     this.answerList[indexL] = answerObj; 
   }
   async submitForm(){
-    console.log(this.questionaireId)
-    console.log(this.questionIdList)
-    console.log(this.answerList)
-    console.log(this.questionIdList.length);
     let result;
     let result2;
     if(this.questionIdList.length===this.answerList.length){
       for (let index = 0; index < this.questionIdList.length; index++) {
         if(index<=this.answerList.length){
-        console.log("Index here is "+index)
-        console.log(this.answerList[index]);
         result = await axios.post('/graphql',{
           query: `mutation addAnswer($questionaireO: String!, $questionO:String!, $answerO:String!){
             addAnswer(question: $questionO, questionaire: $questionaireO, answer: $answerO) {
@@ -186,10 +201,6 @@ class ViewQuestionaire extends React.Component {
                 emailO:"daudahmed870@gmail.com"
               }
           });
-          if(result2){
-            console.log(result2);
-          }
-          console.log(result);
           
           this.setState({succes:true});
           this.setState({succesMsg:'Answers submited successfully'})
@@ -216,7 +227,6 @@ class ViewQuestionaire extends React.Component {
     this.userSelectedAnswerList=[]
     for (let index4 = 0; index4 < this.state.questionaires.answers.length; index4++) {
       if(event.target.value==this.state.questionaires.answers[index4].user._id){
-        console.log('rrr')
         newObj.ans=this.state.questionaires.answers[index4].answer
         newObj.queId=this.state.questionaires.answers[index4].question.id
         newObj.queName=this.state.questionaires.answers[index4].question.question
@@ -224,7 +234,6 @@ class ViewQuestionaire extends React.Component {
         newObj={}
       }
     }
-    console.log(this.userSelectedAnswerList)
     this.setState({userBit:true})
     this.setState({submitBit:false})
   }
@@ -248,8 +257,6 @@ class ViewQuestionaire extends React.Component {
   // "daudahmed870@gmail.com"
   async submitInvite(){
     let result3
-    console.log(this.invitePermission)
-    console.log(this.inviteEmail)
 
     result3 = await axios.post('/graphql',{
       query: `mutation inviteUserToFillQuestionaire($questionaireO:String!, $permissionO:String, $emailO:String!){
@@ -264,7 +271,6 @@ class ViewQuestionaire extends React.Component {
         }
     });
     if(result3){
-      console.log(result3);
       this.setState({succes:true});
       this.setState({succesMsg:'User Invited Successfully'})
     }
@@ -285,6 +291,15 @@ class ViewQuestionaire extends React.Component {
     let AnsweredDiv=[]
     let usersList=[]
 
+    let inviteButton;
+    if(this.state.isowner){
+      inviteButton=<Button color="success" round onClick={this.openInvite}>
+                    INVITE OTHERS
+                  </Button>
+    }else{
+      inviteButton=<small></small>
+    }
+    
     let invite
     if(this.state.inviteBit){
       invite=<div className="form-group">
@@ -360,9 +375,8 @@ class ViewQuestionaire extends React.Component {
                   <Button color="warning" round onClick={this.submitFF}>
                     CLICIK TO SUBMIT YOURS
                   </Button>
-                  <Button color="success" round onClick={this.openInvite}>
-                    INVITE OTHERS
-                  </Button><br/><hr/>
+                  {inviteButton}
+                  <br/><hr/>
                   {invite}
 
                 </CardBody> 

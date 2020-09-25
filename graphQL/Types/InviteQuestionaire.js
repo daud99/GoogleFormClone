@@ -7,8 +7,7 @@ const {
 
 import QuestionaireType from './Questionaire'
 import UserType from './User'
-import * as questionResolvers from '../Resolvers/Question'
-
+import * as inviteQuestionarieResolvers from '../Resolvers/InviteQuestionaire'
 const InviteQuestionaireType = new GraphQLObjectType({
     name: 'InviteQuestionaire',
     fields: () => ({

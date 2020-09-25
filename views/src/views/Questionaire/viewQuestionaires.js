@@ -113,7 +113,7 @@ class ViewAllQuestionaire extends React.Component {
         <td scope="col" className="col-5">{this.state.questionaires[index].title}</td>
         <td scope="col" className="col-3">{this.state.questionaires[index].category}</td>
         <td scope="col" className="col-3">{this.state.questionaires[index].createdAt}</td>
-        <td scope="col" className="col-4"><Button color="primary" round>Invite Users</Button>
+        <td scope="col" className="col-4">
             <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
             <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button>
         </td>

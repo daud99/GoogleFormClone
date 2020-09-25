@@ -17,12 +17,10 @@ if(localStorage.getItem('localToken')){
 }
 
 axios.interceptors.request.use(config => {
-  console.log('Request Interceptor', config)
   return config
 })
 
 axios.interceptors.response.use(res => {
-  console.log('Response Interceptor', res)
   if (res.data.token) {
     axios.defaults.headers.common['Authorization'] = 'bearer ' + res.data.token
   }

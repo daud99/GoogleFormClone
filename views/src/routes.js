@@ -30,6 +30,7 @@ import DashboardPage from "views/Dashboard/Dashboard";
 import UserProfile from "views/UserProfile/UserProfile";
 import CreateQuestionaire from "views/Questionaire/CreateQuestionaire";
 import ViewAllQuestionaire from "views/Questionaire/viewQuestionaires";
+import ViewInvitedQuestionaire from "views/Questionaire/viewInvitedQuestionaire";
 
 let adminDashboardRoutes=[];
 if(localStorage.getItem('token') || localStorage.getItem('localToken')){
@@ -60,6 +61,13 @@ if(localStorage.getItem('token') || localStorage.getItem('localToken')){
         name: "All Questionaires",
         icon: Pages,
         component: ViewAllQuestionaire,
+        layout: "/l"
+      },
+      {
+        path: "/invitedQuestionaires",
+        name: "Invited Questionaires",
+        icon: Pages,
+        component: ViewInvitedQuestionaire,
         layout: "/l"
       }
     ];
