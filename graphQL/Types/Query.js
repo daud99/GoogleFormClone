@@ -23,11 +23,11 @@ const query = new GraphQLObjectType({
       type: UserType,
       args: {
         id: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         }
       },
       resolve(parentValue, args, req) {
-        return userResolvers.getUserById(parentValue, args, req)
+        return userResolvers.getUserById(parentValue,args, req)
       }
     },
     getQuestionsOfQuestionaire: {

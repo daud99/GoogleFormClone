@@ -65,7 +65,7 @@ class CreateQuestionaire extends React.Component {
   }
   handleQuestionaireCategory = event =>{
     this.setState({questionaireCatogory:event.target.value})
-    this.questionaireObj.questionCategory= event.target.value;
+    this.questionaireObj.questionaireCatogory= event.target.value;
   }
 
   handleQuestionaireQuestion = event => {
@@ -74,12 +74,16 @@ class CreateQuestionaire extends React.Component {
   }
 
   addQuestion(){
-    let data={titleQ:this.questionObj.titleQ, questionCategory:this.questionObj.questionCategory}
-    this.questionsExt.push(data);
-    this.setState({questions:this.questionsExt});
-    this.listOfQuestions=[]
-    this.questionVal=' '
-    console.log(this.questionsExt)
+    if(this.questionObj.titleQ==''){
+      alert('Please write question first before admitting')
+    }else{
+      let data={titleQ:this.questionObj.titleQ, questionCategory:this.questionObj.questionCategory}
+      this.questionsExt.push(data);
+      this.setState({questions:this.questionsExt});
+      this.listOfQuestions=[]
+      this.questionVal=' '
+      console.log(this.questionsExt)
+    }
   }
 
   removeQuestion(index){
@@ -87,9 +91,13 @@ class CreateQuestionaire extends React.Component {
   }
 
   submitQuestionare(){
-    if(this.questionaireObj.title==='' || this.questionaireObj.questionCategory===''){
-      alert("Please fill all fields")
-    }else if(this.questionaireObj.title!=='' && this.questionaireObj.questionCategory!==''){
+    console.log(this.questionaireObj)
+    if(this.questionaireObj.questionaireCatogory==''){
+      alert("Please write questionaire Category")
+    }else if(this.questionaireObj.title==''){
+      alert("Please write questionaire title")
+    }
+    else if(this.questionaireObj.title!=='' && this.questionaireObj.questionaireCatogory!==''){
       axios.post('/graphql',{
         query: `mutation addQuestionaire($titleO: String!, $categoryO:String!, $userIdO:String!){
             addQuestionaire(title: $titleO , category: $categoryO, owner: $userIdO) {
@@ -99,7 +107,7 @@ class CreateQuestionaire extends React.Component {
         }`,
           variables:{
             titleO:this.questionaireObj.title,
-            categoryO:this.questionaireObj.questionCategory,
+            categoryO:this.questionaireObj.questionaireCatogory,
             userIdO:localStorage.getItem('useId')
           }
       }).then((result) => {
@@ -131,10 +139,11 @@ class CreateQuestionaire extends React.Component {
               }
           }).then((result) => {
             this.setState({succes:true})
+            this.setState({succesMsg:'All Questions are added'})
           });
         }
       }
-      this.setState({succesMsg:'All Questions are added'})
+      
       this.questionsExt=[];
       this.listOfQuestions=[];
       this.setState({questions:[]})

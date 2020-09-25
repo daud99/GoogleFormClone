@@ -81,16 +81,18 @@ class UserP extends React.Component {
     this.setState({
       name:this.data.name,
       email:this.data.email,
-      password:this.data.password,
-      password2:this.data.password2
+      // password:this.data.password,
+      // password2:this.data.password2
     },()=>{
       var user
-      if(this.data.password || this.data.password==='' || this.data.password2 || this.data.password2==='' ){
-        user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
-      }
-      else{
-        user = {name:this.state.name,email:this.state.email};
-      }
+      // if(this.data.password || this.data.password==='' || this.data.password2 || this.data.password2==='' ){
+      //   user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
+      // }
+      // else{
+      //   user = {name:this.state.name,email:this.state.email};
+      // }
+      user = {name:this.state.name,email:this.state.email};
+
       console.log(user);
       axios.patch('/user/update', user)
       .then(res => {
@@ -99,7 +101,8 @@ class UserP extends React.Component {
           this.setState({errr:false});
           this.setState({succes:true});
           this.setState({succesMsg:res.data.msg});
-          this.setState({userProfile:res.data.doc});
+
+          // this.setState({userProfile:res.data.doc});
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
@@ -199,18 +202,39 @@ class UserP extends React.Component {
       this.setState({"locallogin":false})
     }
     else if(localStorage.getItem('localToken')){
-      axios.get('/user/profile')
-      .then(res => {
-        this.setState({userProfile:res.data});
-        this.data.name=res.data.name;
-        this.data.email=res.data.email;
-        this.setState({userNamep:res.data.name,userEmailp:res.data.email})
-        if(res.data.photo){
-          this.setState({profilePhotoVar:url1.apiURL+'/'+res.data.photo})
-        }
-        else{
-          this.setState({profilePhotoVar:avatar})
-        }
+      // axios.get('/user/profile')
+      // .then(res => {
+      //   this.setState({userProfile:res.data});
+      //   this.data.name=res.data.name;
+      //   this.data.email=res.data.email;
+      //   this.setState({userNamep:res.data.name,userEmailp:res.data.email})
+      //   if(res.data.photo){
+      //     this.setState({profilePhotoVar:url1.apiURL+'/'+res.data.photo})
+      //   }
+      //   else{
+      //     this.setState({profilePhotoVar:avatar})
+      //   }
+      // });
+      axios.post('/graphql',{
+        query: `query getUserByID($idO:String){
+          getUserByID(id:$idO) {
+                name,
+                email,
+                updatedAt,
+                type
+          }
+        }`,
+          variables:{
+            $idO:"null"
+          }
+      }).then((result) => {
+        console.log(result.data)
+        this.setState({userProfile:result.data.data.getUserByID});
+        this.data.name=result.data.data.getUserByID.name;
+        this.data.email=result.data.data.getUserByID.email;
+        this.setState({userNamep:result.data.data.getUserByID.name,userEmailp:result.data.data.getUserByID.email})
+        this.setState({profilePhotoVar:avatar});
+        this.setState({createdAtV:result.data.data.getUserByID.updatedAt})
       });
       this.setState({"locallogin":true})
       this.setState({"googleLogin":false})
@@ -259,7 +283,10 @@ class UserP extends React.Component {
                 <CardBody profile>
                   <h6 className={classes.cardCategory}>{this.state.nameV}</h6>
                   <h4 className={classes.cardTitle}>{this.state.emailV}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.createdAtV}</p>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt}</p>
+                  <Button color="info" round onClick={()=>this.setImageInpN()}>
+                  {this.state.userProfile.type}
+                  </Button>
                 </CardBody>
               </Card>
             </GridItem>
@@ -280,7 +307,7 @@ class UserP extends React.Component {
                     <img src={this.state.profilePhotoVar} alt="..." />
                   </a>
                 </CardAvatar>
-                <div>
+                {/* <div>
                 {imgInput}<br/>
                 <Button color="primary" round onClick={()=>this.setImageInp()}>
                 Update Profile Picture
@@ -288,12 +315,15 @@ class UserP extends React.Component {
                 <Button color="danger" round data-toggle="modal" data-target="#myModal">
                 Delete Profile Picture
                 </Button>
-                </div>
+                </div> */}
                 
                 <CardBody profile>
                   <h6 className={classes.cardCategory}>{this.state.userProfile.name}</h6>
                   <h4 className={classes.cardTitle}>{this.state.userProfile.email}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.createdAt}</p>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt}</p>
+                  <Button color="info" round onClick={()=>this.setImageInpN()}>
+                  {this.state.userProfile.type}
+                  </Button>
                 </CardBody>
               </Card>
             </GridItem>
@@ -310,15 +340,16 @@ class UserP extends React.Component {
                     <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={this.state.userEmailp} placeholder={this.state.userProfile.email}  onChange={this.handleEmail}/>
                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                   </div>
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
                   </div>
                   <div className="form-group">
                     <input type="password" className="form-control" id="exampleInputPassword2" placeholder="Retype Password" onChange={this.handlePassword2}/>
-                  </div>
-                  <Button color="success" onClick={this.register}>
+                  </div> */}
+                  
+                  {/* <Button color="success" onClick={this.register}>
                       Update
-                  </Button>
+                  </Button> */}
                 </CardBody>
               </Card>
             </GridItem>

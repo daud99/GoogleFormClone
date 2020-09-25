@@ -31,13 +31,14 @@ export const getUserAnswers = async (parentValue, args) => {
   return await Answer.find({'_id': {$in: parentValue.answers}});
 }
 
-export const getUserById = async (parentValue, args, req) => {
+export const getUserById = async (parentValue,args, req) => {
   const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
   if(request_invalid) {
     throw request_invalid;
   }
-  let user =  await User.findOne({_id: args.id});
+  let user =  await User.findOne({_id: req.userId});
   user = user.toObject();
+  console.log(user)
   if("password" in user) delete user.password;
   return user;
 }
@@ -85,6 +86,7 @@ export const deleteUser = async (parentValue, args, req) => {
 export const addUser = async (parentValue, args) => {
   try {
     var u = await User.findOne({email: args.email});
+    console.log(u)
     if(u) {
       return new Error('User exist already');
     }
@@ -102,7 +104,7 @@ export const addUser = async (parentValue, args) => {
     var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
 
     var emailHTML = ejs.render(template, {
-        siteURL: `${SiteConfig.url}:${SiteConfig.port}/verify-user?token=${user.resetPasswordToken}`,
+        siteURL: `${SiteConfig.url}:${SiteConfig.port}/verify-user/${user.resetPasswordToken}`,
         action: 'To verify account, click the following link:',
         btnText: 'Account Verification',
         message: 'If you do not signed up on our site,you can ignore and delete this email.'
@@ -222,7 +224,7 @@ export const sendRecoveryEmail = async (parentValue, args) => {
   var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
 
   var emailHTML = ejs.render(template, {
-      siteURL: `${SiteConfig.url}:${SiteConfig.port}/reset-password?token=${user.resetPasswordToken}`,
+      siteURL: `${SiteConfig.url}:${SiteConfig.port}/reset-password/${user.resetPasswordToken}`,
       action: 'To reset the password, click the following link:',
       btnText: 'Reset Password',
       message: 'If you do not requested the password change,you can ignore and delete this email'
@@ -268,8 +270,7 @@ export const updateRecoverPassword = async (parentValue, args) => {
   if(!user) {
     return new Error("Could not find active user by the token.");
   }
-
-  user.password = await this.hashPassword(args.newPassword);
+  user.password = await bcrypt.hash(args.newPassword, 12);
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   user.save();

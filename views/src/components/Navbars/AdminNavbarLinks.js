@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { withRouter } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
+import PropTypes from "prop-types";
 
 
 // @material-ui/core components
@@ -59,6 +60,10 @@ const AdminNavbarLinks = (props) => {
           localStorage.removeItem("useId");
           localStorage.removeItem("name");
           localStorage.removeItem("email");
+          props.history.push('/login');
+          props.onTokenGet('');
+          props.onUserIdGet('');
+          props.onUserTypeGet('');
           props.history.push('/login')
         // }
       // });
@@ -71,9 +76,9 @@ const AdminNavbarLinks = (props) => {
     localStorage.removeItem("photo");
     localStorage.removeItem("createdAt");
     localStorage.removeItem("tokenid");
-    this.props.onTokenGet('');
-    this.props.onUserIdGet('');
-    this.props.onUserTypeGet('');
+    props.onTokenGet('');
+    props.onUserIdGet('');
+    props.onUserTypeGet('');
     props.history.push('/login')
   }
   const handleLogoutFailure =(response)=> {
@@ -175,6 +180,8 @@ const mapPropsToDispatch = dispatch => {
     onUserTypeGet: (usertype)=> dispatch({type: 'SEUSERTYPE', usertype})
   }
 }
-
+AdminNavbarLinks.defaultProps = {
+  input: PropTypes.isNotNull // you can amend this accordingly
+}
 
 export default connect(null, mapPropsToDispatch)(withRouter(AdminNavbarLinks))
