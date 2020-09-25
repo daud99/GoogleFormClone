@@ -95,7 +95,7 @@ const AdminNavbarLinks = (props) => {
   }else if(localStorage.getItem("token")){
     logoutBut=<GoogleLogout
                 clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
-                buttonText='Logout from Google'
+                buttonText='Logout'
                 onLogoutSuccess={ logout }
                 onFailure={ handleLogoutFailure }
               >

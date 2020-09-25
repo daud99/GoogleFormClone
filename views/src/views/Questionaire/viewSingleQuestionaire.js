@@ -292,9 +292,9 @@ class ViewQuestionaire extends React.Component {
               <small id="emailHelp" className="form-text text-muted">Enter email to which you want to invite</small>
 
               <select value={this.invitePermission} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
-                <option selected>Select Permission</option>
-                <option value='r' selected>Read Only</option>
-                <option value='rw' selected>Read and Write</option>
+                <option >Select Permission</option>
+                <option value='r' >Read Only</option>
+                <option value='rw' >Read and Write</option>
               </select>
               <Button color="success" round onClick={this.submitInvite}>
                 Send Invitation
