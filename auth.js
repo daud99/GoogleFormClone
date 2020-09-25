@@ -44,26 +44,21 @@ module.exports = new class {
             token = req.get('tokenid');
               
         } else {
-            console.log("here");
             req.isAuth = false;
             return next();
         }
        
         if(!token && token === '') {
-            console.log("here 1");
             req.isAuth = false;
             return next();
         }
         try {
             decodedToken = jwt.verify(token, secret);
         } catch(err) {
-            console.log("here2");
-            console.log(err);
             req.isAuth = false;
             return next();
         }
         if(!decodedToken) {
-            console.log("ol;kl;kl;kfk");
             req.isAuth = false;
             return next();
         }

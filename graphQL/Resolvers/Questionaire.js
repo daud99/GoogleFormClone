@@ -6,6 +6,7 @@ var nodemailer = require("nodemailer");
 const SiteConfig = require("../../config/site");
 const EmailConfig = require("../../config/email");
 const Questionaire = require('../../models/QuestionaireSchema');
+const InviteQuestionaire = require('../../models/InviteQuestionaireSchema');
 const Question = require('../../models/QuestionSchema');
 const Answer = require('../../models/AnswerSchema');
 const  User = require('../../models/User');
@@ -92,6 +93,7 @@ export const deleteQuestionaire = async (parentValue, args, req) => {
     if(result) {
       await Question.deleteMany({'questionaire': result._id});
       await Answer.deleteMany({'questionaire': result._id});
+      await InviteQuestionaire.deleteMany({'questionaire': result._id});
       let users = await User.find(
         {questionaires: {
         $elemMatch: {
@@ -99,10 +101,7 @@ export const deleteQuestionaire = async (parentValue, args, req) => {
           }
         }
       });
-      console.log("users found are");
-      console.log(users);
       for(var i in users) {
-        console.log(i);
         users[i].questionaires.remove(result._id);
         await users[i].save();
       }
@@ -147,7 +146,6 @@ export const addNewQuestionaire = async (parentValue, args, req) => {
       backgroundVideo: args.backgroundVideo
     });
     questionaire = await questionaire.save();
-    console.log(args.owner);
     const user = await User.findOne({_id: args.owner});
     if(user) {
       user.questionaires.push(questionaire._id);
@@ -193,7 +191,7 @@ export const alertOwnerOnQuestionaireFill = async (parentValue, args, req) => {
         // send mail with defined transport object
         let info = await transporter.sendMail({
             to: args.email, // list of receivers
-            subject: "Invitation to fill the form", // Subject line
+            subject: "A new response to questionaire", // Subject line
             html: emailHTML // html body
         });
 

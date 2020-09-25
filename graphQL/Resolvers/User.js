@@ -38,7 +38,6 @@ export const getUserById = async (parentValue,args, req) => {
   }
   let user =  await User.findOne({_id: req.userId});
   user = user.toObject();
-  console.log(user)
   if("password" in user) delete user.password;
   return user;
 }
@@ -86,7 +85,6 @@ export const deleteUser = async (parentValue, args, req) => {
 export const addUser = async (parentValue, args) => {
   try {
     var u = await User.findOne({email: args.email});
-    console.log(u)
     if(u) {
       return new Error('User exist already');
     }
@@ -100,7 +98,7 @@ export const addUser = async (parentValue, args) => {
       age: args.age,
       resetPasswordToken: token
     })
-    await user.save(); 
+    await user.save();
     var template = fs.readFileSync(path.join('emails', 'notification.htm'), 'utf-8');
 
     var emailHTML = ejs.render(template, {
@@ -109,10 +107,10 @@ export const addUser = async (parentValue, args) => {
         btnText: 'Account Verification',
         message: 'If you do not signed up on our site,you can ignore and delete this email.'
     });
-   
+
 
     try {
-    
+
         let transporter = nodemailer.createTransport({
             host: EmailConfig.host,
             port: EmailConfig.port,
@@ -122,11 +120,11 @@ export const addUser = async (parentValue, args) => {
                 pass: EmailConfig.password
             }
         });
-        
+
         // send mail with defined transport object
         let info = await transporter.sendMail({
             to: user.email, // list of receivers
-            subject: "Password Recovery", // Subject line
+            subject: "Email Verification", // Subject line
             html: emailHTML // html body
         });
 
@@ -201,11 +199,11 @@ export const googleLogin = async (parentValue, args) => {
     console.log(e);
     throw new Error('Error while logging in');
   }
- 
+
 };
 
 export const sendRecoveryEmail = async (parentValue, args) => {
-        
+
   var user = await User.findOne({
       email: args.email,
   }).exec();
@@ -215,7 +213,7 @@ export const sendRecoveryEmail = async (parentValue, args) => {
   }
 
   var token = Misc.makeID(32);
-  
+
   user.resetPasswordToken = token;
   user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
@@ -231,7 +229,7 @@ export const sendRecoveryEmail = async (parentValue, args) => {
   });
 
   try {
-  
+
       let transporter = nodemailer.createTransport({
           host: EmailConfig.host,
           port: EmailConfig.port,
@@ -241,7 +239,7 @@ export const sendRecoveryEmail = async (parentValue, args) => {
               pass: EmailConfig.password
           }
       });
-      
+
       // send mail with defined transport object
       let info = await transporter.sendMail({
           to: user.email, // list of receivers
@@ -266,7 +264,7 @@ export const updateRecoverPassword = async (parentValue, args) => {
   }
 
   var user = await User.findOne({ resetPasswordToken: args.token, resetPasswordExpires: { $gt: Date.now() } }).exec();
-  
+
   if(!user) {
     return new Error("Could not find active user by the token.");
   }
@@ -274,7 +272,7 @@ export const updateRecoverPassword = async (parentValue, args) => {
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   user.save();
-  
+
   return {msg: "Your password is reset successfully"};
 }
 
@@ -285,7 +283,7 @@ export const verifyUser = async (parentValue, args) => {
   }
 
   var user = await User.findOne({ resetPasswordToken: args.token }).exec();
-  
+
   if(!user) {
     return new Error("Could not find active user by the token.");
   }
@@ -294,7 +292,6 @@ export const verifyUser = async (parentValue, args) => {
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
   user.save();
-  
+
   return {msg: "User is verified successfully"};
 }
-

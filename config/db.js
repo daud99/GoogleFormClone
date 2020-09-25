@@ -10,9 +10,8 @@ module.exports = {
     
     async connect() {
         var connectionString = `mongodb://${module.exports.host}:${module.exports.port}/${module.exports.database}?authSource=admin`;
-        await mongoose.connect(connectionString, {useNewUrlParser: true});
+        await mongoose.connect(connectionString, { useUnifiedTopology: true, useNewUrlParser: true });
         console.log(`MongoDB connected at ${module.exports.port}!`);
-        mongoose.set('useNewUrlParser', true);
         mongoose.set('useFindAndModify', false);
         mongoose.set('useCreateIndex', true);
     }
