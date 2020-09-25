@@ -190,7 +190,7 @@ class ViewInvitedQuestionaire extends React.Component {
         <td scope="col" className="col-3">{this.state.questionaires[index].questionaire.category}</td>
         <td scope="col" className="col-3">{this.state.questionaires[index].questionaire.createdAt}</td>
         <td scope="col" className="col-4">
-            <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].questionaire.id}`}>View</Button>
+            <Button color="warning" round component={Link} to={`/invitedQuestionaire/${this.state.questionaires[index].id}`}>View</Button>
             <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id,this.state.questionaires[index].senderId,this.state.questionaires[index].receiverId)}>Delete</Button>
         </td>
       </tr>)
