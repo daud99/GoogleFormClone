@@ -7,12 +7,14 @@ const {
 
 import UserType from './User'
 import QuestionaireType from './Questionaire'
+import InviteQuestionaireType from './InviteQuestionaire'
 import AnswerType from './Answer'
 import QuestionType from './Question'
 import AuthDataType from './AuthData'
 import StandardType from './Standard'
 import * as userResolvers from '../Resolvers/User'
 import * as questionaireResolvers from '../Resolvers/Questionaire'
+import * as inviteQuestionaireResolvers from '../Resolvers/InviteQuestionaire'
 import * as answerResolvers from '../Resolvers/Answer'
 import * as questionResolvers from '../Resolvers/Question'
 
@@ -122,6 +124,12 @@ const query = new GraphQLObjectType({
       },
       resolve(parentValue, args, req) {
         return questionaireResolvers.alertOwnerOnQuestionaireFill(parentValue, args, req)
+      }
+    },
+    getInviteQuestionaireForReceiver: {
+      type: GraphQLList(InviteQuestionaireType),
+      resolve(parentValue, args, req) {
+        return inviteQuestionaireResolvers.getInviteQuestionaireForReceiver(parentValue, args, req)
       }
     },
     login: {
