@@ -38,7 +38,6 @@ export const getUserById = async (parentValue,args, req) => {
   }
   let user =  await User.findOne({_id: req.userId});
   user = user.toObject();
-  console.log(user)
   if("password" in user) delete user.password;
   return user;
 }
@@ -86,7 +85,6 @@ export const deleteUser = async (parentValue, args, req) => {
 export const addUser = async (parentValue, args) => {
   try {
     var u = await User.findOne({email: args.email});
-    console.log(u)
     if(u) {
       return new Error('User exist already');
     }
@@ -126,7 +124,7 @@ export const addUser = async (parentValue, args) => {
         // send mail with defined transport object
         let info = await transporter.sendMail({
             to: user.email, // list of receivers
-            subject: "Password Recovery", // Subject line
+            subject: "Email Verification", // Subject line
             html: emailHTML // html body
         });
 
