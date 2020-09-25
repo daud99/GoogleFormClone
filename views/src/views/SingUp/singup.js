@@ -113,10 +113,11 @@ class SignUp extends React.Component {
             this.setState({errr:false});
             this.setState({succes:true});
             this.setState({succesMsg:"You are sign up successfully, Check your mail to verify!"});
-            this.state.name = '';
-            this.state.email = '';
-            this.state.password = '';
-            this.state.password2 = '';
+            this.setState({name:''})
+            this.setState({email:''})
+            this.setState({password:''})
+            this.setState({password2:''})
+
             setTimeout(() => {
               this.props.history.push(`/login`)
             }, 1000)
