@@ -117,7 +117,7 @@ class ViewQuestionaire extends React.Component {
         }else if(result.data.data.getQuestionaireByID){
           this.setState({questionaires:result.data.data.getQuestionaireByID})
           console.log(result.data.data.getQuestionaireByID)
-          if(result.data.data.getQuestionaireByID.owner._id==localStorage.getItem("useId")){
+          if(result.data.data.getQuestionaireByID.owner._id===localStorage.getItem("useId")){
             this.setState({isowner:true})
           }else{
             this.setState({isowner:false})
@@ -130,7 +130,7 @@ class ViewQuestionaire extends React.Component {
             answerQidObj.userName=result.data.data.getQuestionaireByID.answers[index1].user.name
             if(this.submittedAnswersList.length>0){
               for (let index3 = 0; index3 < this.submittedAnswersList.length; index3++) {
-                if(answerQidObj.uId!=this.submittedAnswersList[index3].uId){
+                if(answerQidObj.uId!==this.submittedAnswersList[index3].uId){
                   this.submittedAnswersList.push(answerQidObj)
                 }
               }
@@ -166,7 +166,6 @@ class ViewQuestionaire extends React.Component {
   }
   async submitForm(){
     let result;
-    let result2;
     if(this.questionIdList.length===this.answerList.length){
       for (let index = 0; index < this.questionIdList.length; index++) {
         if(index<=this.answerList.length){
@@ -190,7 +189,7 @@ class ViewQuestionaire extends React.Component {
             }
         });
         if(result) {
-          result2 = await axios.post('/graphql',{
+          await axios.post('/graphql',{
             query: `query alertOwnerOnQuestionaireFill($questionaireIdO:String!, $emailO:String!){
               alertOwnerOnQuestionaireFill(questionaireId: $questionaireIdO, email: $emailO) {
                 msg
@@ -226,7 +225,7 @@ class ViewQuestionaire extends React.Component {
     let newObj={}
     this.userSelectedAnswerList=[]
     for (let index4 = 0; index4 < this.state.questionaires.answers.length; index4++) {
-      if(event.target.value==this.state.questionaires.answers[index4].user._id){
+      if(event.target.value===this.state.questionaires.answers[index4].user._id){
         newObj.ans=this.state.questionaires.answers[index4].answer
         newObj.queId=this.state.questionaires.answers[index4].question.id
         newObj.queName=this.state.questionaires.answers[index4].question.question
@@ -288,7 +287,6 @@ class ViewQuestionaire extends React.Component {
     // }
     this.questionIdList=[]
     let divv=[]
-    let AnsweredDiv=[]
     let usersList=[]
 
     let inviteButton;

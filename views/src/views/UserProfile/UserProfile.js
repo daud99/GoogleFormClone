@@ -11,7 +11,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import axios from '../../axiosSet';
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-import {Progress} from 'reactstrap';
+// import {Progress} from 'reactstrap';
 import url1 from '../../config.js';
 import avatar from "assets/img/faces/marc1.jpg";
 class UserP extends React.Component {
@@ -245,27 +245,27 @@ class UserP extends React.Component {
   render() {
     const classes=makeStyles(this.state.styles);
     let notifi;
-    let imgInput;
+    // let imgInput;
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
     else if(this.state.errr){
       notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
-    if(this.state.imageInputAllow){
-      imgInput=<div className="form-group">
-        <input type="file" className="form-control" id="exampleInputImage" aria-describedby="emailHelp" onChange={this.onChangeHandler}/>
-        <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
-        <Button color="success" round onClick={()=>this.onClickHandler()}>
-        Upload
-        </Button>
-        <Button color="info" round onClick={()=>this.setImageInpN()}>
-        cancel
-        </Button>
-        </div>;
-    }else{
-      imgInput=<small></small>;
-    }
+    // if(this.state.imageInputAllow){
+    //   imgInput=<div className="form-group">
+    //     <input type="file" className="form-control" id="exampleInputImage" aria-describedby="emailHelp" onChange={this.onChangeHandler}/>
+    //     <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
+    //     <Button color="success" round onClick={()=>this.onClickHandler()}>
+    //     Upload
+    //     </Button>
+    //     <Button color="info" round onClick={()=>this.setImageInpN()}>
+    //     cancel
+    //     </Button>
+    //     </div>;
+    // }else{
+    //   imgInput=<small></small>;
+    // }
 
     if(this.state.gooleLogin){
       return (

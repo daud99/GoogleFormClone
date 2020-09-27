@@ -74,7 +74,7 @@ class CreateQuestionaire extends React.Component {
   }
 
   addQuestion(){
-    if(this.questionObj.titleQ==''){
+    if(this.questionObj.titleQ===''){
       alert('Please write question first before admitting')
     }else{
       let data={titleQ:this.questionObj.titleQ, questionCategory:this.questionObj.questionCategory}
@@ -92,9 +92,9 @@ class CreateQuestionaire extends React.Component {
 
   submitQuestionare(){
     console.log(this.questionaireObj)
-    if(this.questionaireObj.questionaireCatogory==''){
+    if(this.questionaireObj.questionaireCatogory===''){
       alert("Please write questionaire Category")
-    }else if(this.questionaireObj.title==''){
+    }else if(this.questionaireObj.title===''){
       alert("Please write questionaire title")
     }
     else if(this.questionaireObj.title!=='' && this.questionaireObj.questionaireCatogory!==''){

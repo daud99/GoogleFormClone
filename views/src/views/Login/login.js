@@ -281,7 +281,7 @@ class Login extends Component {
     this.setState({resetPassAllow:false})
   }
   resetPass(){
-    if(this.resetEmail=='' && !document.getElementById('exampleInputEmail1').value){
+    if(this.resetEmail==='' && !document.getElementById('exampleInputEmail1').value){
       alert("PLEASE WRITE EMAIL")
     }else{
       let q = `mutation {

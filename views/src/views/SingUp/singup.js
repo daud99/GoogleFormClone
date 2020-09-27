@@ -9,8 +9,6 @@ import CardBody from "components/Card/CardBody.js";
 import avatar from "assets/img/faces/singUp.jpg";
 import axios from '../../axiosSet';
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-import { couldStartTrivia } from "typescript";
-
 class SignUp extends React.Component {
   constructor(props) {
     super(props);

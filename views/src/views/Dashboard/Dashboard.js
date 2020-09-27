@@ -1,8 +1,8 @@
 import React from "react";
 
-import { connect } from 'react-redux';
-import Button from "components/CustomButtons/Button.js";
-import { saveAs } from 'file-saver';
+// import { connect } from 'react-redux';
+// import Button from "components/CustomButtons/Button.js";
+// import { saveAs } from 'file-saver';
 
 import axios from '../../axiosSet';
 
