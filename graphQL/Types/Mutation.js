@@ -310,9 +310,6 @@ const mutation = new GraphQLObjectType({
         receiverId: {
           type: graphql.GraphQLString
         },
-        permission: {
-          type: graphql.GraphQLString
-        },
         status: {
           type: graphql.GraphQLString
         }
