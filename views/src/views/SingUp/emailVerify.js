@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Button from "components/CustomButtons/Button.js";
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 // core components
 import Card from "components/Card/Card.js";

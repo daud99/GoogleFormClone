@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Button from "components/CustomButtons/Button.js";
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 // core components
 import Card from "components/Card/Card.js";
@@ -63,9 +63,9 @@ class passwordReset extends Component {
   }
   verifyE(){
     console.log(this.tokenE)
-    if(this.data.password!=this.data.password2){
+    if(this.data.password!==this.data.password2){
         alert("BOTH PASSWORDS DIDNOT MATCH")
-    }else if(this.data.password2=='' || this.data.password==''){
+    }else if(this.data.password2==='' || this.data.password===''){
         alert("MUST FILL BOTH FIELDS")
     }else{
         let q = `mutation {

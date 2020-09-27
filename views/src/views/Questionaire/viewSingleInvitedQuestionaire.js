@@ -62,6 +62,7 @@ class ViewInvitedQuestionaire extends React.Component {
   questionIdList=[]
   answerList=[]
   questionaireId=''
+  currentQuestionaireId=''
   usersL=[];
 
  
@@ -124,14 +125,15 @@ class ViewInvitedQuestionaire extends React.Component {
           }
           
         }else if(result.data.data.getInviteQuestionaireById){
+          this.currentQuestionaireId=result.data.data.getInviteQuestionaireById.questionaire.id
           this.setState({questionaires:result.data.data.getInviteQuestionaireById})
           console.log(result.data.data.getInviteQuestionaireById)
-          if(this.state.questionaires.permission=='rw'){
+          if(this.state.questionaires.permission==='rw'){
             this.setState({rwBit:true})
           }else{
             this.setState({rwBit:false})
           }
-          if(result.data.data.getInviteQuestionaireById.receiverId._id==localStorage.getItem("useId")){
+          if(result.data.data.getInviteQuestionaireById.receiverId._id===localStorage.getItem("useId")){
             this.setState({isowner:true})
           }else{
             this.setState({isowner:false})
@@ -144,7 +146,7 @@ class ViewInvitedQuestionaire extends React.Component {
             answerQidObj.userName=result.data.data.getInviteQuestionaireById.questionaire.answers[index1].user.name
             if(this.submittedAnswersList.length>0){
               for (let index3 = 0; index3 < this.submittedAnswersList.length; index3++) {
-                if(answerQidObj.uId!=this.submittedAnswersList[index3].uId){
+                if(answerQidObj.uId!==this.submittedAnswersList[index3].uId){
                   this.submittedAnswersList.push(answerQidObj)
                 }
               }
@@ -198,12 +200,11 @@ class ViewInvitedQuestionaire extends React.Component {
             }
           }`,
             variables:{
-              questionaireO:this.questionaireId,
+              questionaireO:this.currentQuestionaireId,
               questionO:this.questionIdList[index],
               answerO:this.answerList[index].answer
             }
         });
-        console.log(result.data.errors[0].message)
         if(result) {
           if(result.data.errors) {
             if(result.data.errors[0].message){
@@ -225,7 +226,7 @@ class ViewInvitedQuestionaire extends React.Component {
                 }
               }`,
                 variables:{
-                  questionaireIdO:this.questionaireId,
+                  questionaireIdO:this.currentQuestionaireId,
                   emailO:"daudahmed870@gmail.com"
                 }
             });
@@ -269,11 +270,11 @@ class ViewInvitedQuestionaire extends React.Component {
   onUserClick(event){
     let newObj={}
     this.userSelectedAnswerList=[]
-    for (let index4 = 0; index4 < this.state.questionaires.answers.length; index4++) {
-      if(event.target.value==this.state.questionaires.answers[index4].user._id){
-        newObj.ans=this.state.questionaires.answers[index4].answer
-        newObj.queId=this.state.questionaires.answers[index4].question.id
-        newObj.queName=this.state.questionaires.answers[index4].question.question
+    for (let index4 = 0; index4 < this.state.questionaires.questionaire.answers.length; index4++) {
+      if(event.target.value===this.state.questionaires.questionaire.answers[index4].user._id){
+        newObj.ans=this.state.questionaires.questionaire.answers[index4].answer
+        newObj.queId=this.state.questionaires.questionaire.answers[index4].question.id
+        newObj.queName=this.state.questionaires.questionaire.answers[index4].question.question
         this.userSelectedAnswerList.push(newObj)
         newObj={}
       }
@@ -334,7 +335,6 @@ class ViewInvitedQuestionaire extends React.Component {
     
     this.questionIdList=[]
     let divv=[]
-    let AnsweredDiv=[]
     let usersList=[]
 
     let inviteButton;
@@ -374,7 +374,7 @@ class ViewInvitedQuestionaire extends React.Component {
         <option value={this.submittedAnswersList[index2].uId} key={index2}>{this.submittedAnswersList[index2].userName}</option>
       )
     }
-    if(this.state.submitBit && this.state.questionaires.permission=='rw'){
+    if(this.state.submitBit && this.state.questionaires.permission==='rw'){
       // this.setState({rwBit:true})
       this.questionIdList=[]
       for (let index = 0; index < this.state.questions.length; index++) {
@@ -400,7 +400,7 @@ class ViewInvitedQuestionaire extends React.Component {
             </div>
         )      
       }
-    }else if(this.state.questionaires.permission=='r'){
+    }else if(this.state.questionaires.permission==='r'){
       // this.setState({rwBit:false})
         this.questionIdList=[]
         for (let index = 0; index < this.userSelectedAnswerList.length; index++) {

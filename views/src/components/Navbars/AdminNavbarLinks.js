@@ -18,15 +18,12 @@ import Poppers from "@material-ui/core/Popper";
 import Divider from "@material-ui/core/Divider";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
-import Search from "@material-ui/icons/Search";
 // core components
-import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import { GoogleLogout  } from 'react-google-login';
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
-import axios from '../../axiosSet';
 
 const useStyles = makeStyles(styles);
 

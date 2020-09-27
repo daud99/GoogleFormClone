@@ -17,13 +17,9 @@
 */
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
-import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import Pages from "@material-ui/icons/Pages";
 import Assignment from "@material-ui/icons/Assignment";
-import PeopleIcon from '@material-ui/icons/People';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import EditIcon from '@material-ui/icons/Edit';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard";

@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "components/CustomButtons/Button.js";
-import GridItem from "components/Grid/GridItem.js";
+// import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import axios from '../../axiosSet';
 import Card from "components/Card/Card.js";
@@ -95,7 +95,7 @@ class ViewAllQuestionaire extends React.Component {
     }).then((result) => {
       this.regetQuestionaire();
       this.setState({succes:true})
-      this.setState({succesMsg:'Questionaire Deleted'+'=>'+result.data.data.deleteQuestionaire.title})
+      this.setState({succesMsg:'Questionaire Deleted=>'+result.data.data.deleteQuestionaire.title})
     });
   }
 
@@ -109,11 +109,11 @@ class ViewAllQuestionaire extends React.Component {
     }
     for (let index = 0; index < this.state.questionaires.length; index++) {
       rows.push(<tr key={index} className="d-flex">
-        <td scope="col" className="col-1">{index}</td>
-        <td scope="col" className="col-5">{this.state.questionaires[index].title}</td>
-        <td scope="col" className="col-3">{this.state.questionaires[index].category}</td>
-        <td scope="col" className="col-3">{this.state.questionaires[index].createdAt}</td>
-        <td scope="col" className="col-4">
+        <td  className="col-1">{index}</td>
+        <td  className="col-5">{this.state.questionaires[index].title}</td>
+        <td  className="col-3">{this.state.questionaires[index].category}</td>
+        <td  className="col-3">{this.state.questionaires[index].createdAt}</td>
+        <td  className="col-4">
             <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
             <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button>
         </td>
