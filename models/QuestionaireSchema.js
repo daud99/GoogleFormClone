@@ -12,7 +12,7 @@ let QuestionaireSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required: true,
+        required: false,
     },
     upVote: {
         type: Number,
