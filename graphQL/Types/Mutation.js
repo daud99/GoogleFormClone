@@ -127,7 +127,7 @@ const mutation = new GraphQLObjectType({
           type: new graphql.GraphQLNonNull(graphql.GraphQLString)
         },
         category: {
-          type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+          type: graphql.GraphQLString
         },
         upVote: {
           type: graphql.GraphQLInt

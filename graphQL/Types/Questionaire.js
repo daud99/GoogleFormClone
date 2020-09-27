@@ -22,7 +22,7 @@ const QuestionaireType = new GraphQLObjectType({
       type: GraphQLNonNull(GraphQLString)
     },
     category: {
-      type: GraphQLNonNull(GraphQLString)
+      type: GraphQLString
     },
     createdAt:{
       type: GraphQLString

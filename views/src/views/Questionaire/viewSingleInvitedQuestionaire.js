@@ -44,7 +44,9 @@ class ViewInvitedQuestionaire extends React.Component {
       submitBit:true,
       inviteBit:false,
 
-      rwBit:false
+      rwBit:false,
+
+      sinvitePermissio:''
     };
     
     this.submitForm = this.submitForm.bind(this);
@@ -57,7 +59,7 @@ class ViewInvitedQuestionaire extends React.Component {
     this.handleSelectedPermission = this.handleSelectedPermission.bind(this);
     this.handleInviteEmail = this.handleInviteEmail.bind(this);
     this.submitInvite = this.submitInvite.bind(this);
-
+    this.goBackTo = this.goBackTo.bind(this);
   }
   questionIdList=[]
   answerList=[]
@@ -267,8 +269,14 @@ class ViewInvitedQuestionaire extends React.Component {
     }
     
   }
+  goBackTo(){
+    setTimeout(() => {
+      this.props.history.push(`/l/invitedQuestionaires`)
+    }, 700);
+  }
   onUserClick(event){
     let newObj={}
+    this.setState({selectedUser:event.target.value})
     this.userSelectedAnswerList=[]
     for (let index4 = 0; index4 < this.state.questionaires.questionaire.answers.length; index4++) {
       if(event.target.value===this.state.questionaires.questionaire.answers[index4].user._id){
@@ -297,6 +305,7 @@ class ViewInvitedQuestionaire extends React.Component {
     this.inviteEmail=event.target.value
   }
   handleSelectedPermission(event){
+    this.setState({sinvitePermissio:event.target.value})
     this.invitePermission=event.target.value
   }
   // "daudahmed870@gmail.com"
@@ -318,6 +327,7 @@ class ViewInvitedQuestionaire extends React.Component {
     if(result3){
       this.setState({succes:true});
       this.setState({succesMsg:'User Invited Successfully'})
+      this.setState({inviteBit:false})
     }
 
   }
@@ -352,7 +362,7 @@ class ViewInvitedQuestionaire extends React.Component {
               <input type="email" className="form-control" onChange={(event)=>this.handleInviteEmail(event)} aria-describedby="emailHelp" placeholder="Enter Email"/>
               <small id="emailHelp" className="form-text text-muted">Enter email to which you want to invite</small>
 
-              <select value={this.invitePermission} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
+              <select value={this.state.sinvitePermissio} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
                 <option >Select Permission</option>
                 <option value='r' >Read Only</option>
                 <option value='rw' >Read and Write</option>
@@ -428,14 +438,16 @@ class ViewInvitedQuestionaire extends React.Component {
     }
 
     return (
-      <div style={{paddingLeft:'10%', paddingRight:'10%', overflowY:"scroll",overflow: "visible"}}>
+      <div style={{paddingLeft:'10%', paddingRight:'10%', paddingTop:'5%', overflowY:"scroll",overflow: "visible"}}>
           {notifi}
           <GridContainer>
+          <Button color="danger" round onClick={this.goBackTo}>
+            GO BACK
+          </Button>
           <GridItem xs={12} sm={12} md={12} lg={12}>
             <Card>
                 <CardBody>
                   <h3 style={{fontWeight:"bolder", textAlign:"center", textDecoration: "underline"}}>{this.state.questionaires.title}</h3>
-                  <p style={{fontWeight:"bolder", textAlign:"center"}}>Category:&nbsp;{this.state.questionaires.category}</p>
                   
                   <div className="input-group mb-3">
                     <select value={this.state.selectedUser} onChange={this.onUserClick} className="custom-select" id="usersSelect">

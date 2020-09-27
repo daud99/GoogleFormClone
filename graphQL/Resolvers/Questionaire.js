@@ -129,6 +129,7 @@ export const deleteAllQuestionaires = async (parentValue, args, req) => {
 };
 
 export const addNewQuestionaire = async (parentValue, args, req) => {
+  console.log(req.userId)
   const request_invalid = await auth.isSuperAdminOrAdminOrUser(req.isAuth, req.userId);
   if(request_invalid) {
     throw request_invalid;

@@ -159,7 +159,7 @@ export const login = async (parentValue, args) => {
     }
     // Second argument is a string which we are using to hash the token some one that know this key will only be able to validate your token
     const token = jwt.sign({userId: u.id, email: u.email}, secret, {
-      expiresIn: '24h'
+      expiresIn: '8760h'
     });
     return {
       userId: u.id, token: token, tokenExpiration: 1, email: u.email, type: u.type, name: u.name
@@ -188,7 +188,7 @@ export const googleLogin = async (parentValue, args) => {
           let newUser= new User({name:paylod.given_name+" "+paylod.family_name, email:paylod.email, photo:paylod.picture, password:paylod.email+secret, tokedid:tokenID});
           let user = await newUser.save();
           var token = jwt.sign({_id: user._id},secret,
-          { expiresIn: '24h' });
+          { expiresIn: '8760h' });
           return {
             userId: user._id, token: token, tokenExpiration: 1, email: user.email, type: user.type, name: user.name, photo: user.photo, createdAt: user.createdAt
           }

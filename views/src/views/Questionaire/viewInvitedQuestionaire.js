@@ -187,8 +187,7 @@ class ViewInvitedQuestionaire extends React.Component {
       rows.push(<tr key={index} className="d-flex">
         <td className="col-1">{index}</td>
         <td className="col-5">{this.state.questionaires[index].questionaire.title}</td>
-        <td className="col-3">{this.state.questionaires[index].questionaire.category}</td>
-        <td className="col-3">{this.state.questionaires[index].questionaire.createdAt}</td>
+        <td className="col-2">{this.state.questionaires[index].questionaire.createdAt}</td>
         <td className="col-4">
             <Button color="warning" round component={Link} to={`/invitedQuestionaire/${this.state.questionaires[index].id}`}>View</Button>
             <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id,this.state.questionaires[index].senderId,this.state.questionaires[index].receiverId)}>Delete</Button>
@@ -208,8 +207,7 @@ class ViewInvitedQuestionaire extends React.Component {
                     <tr className="d-flex">
                       <th scope="col" className="col-1">#</th>
                       <th scope="col" className="col-5">Title</th>
-                      <th scope="col" className="col-3">Category</th>
-                      <th scope="col" className="col-3">CreatedAt</th>
+                      <th scope="col" className="col-2">CreatedAt</th>
                       <th scope="col" style={{textAlign:"center"}} className="col-4">Action</th>
                     </tr>
                   </thead>

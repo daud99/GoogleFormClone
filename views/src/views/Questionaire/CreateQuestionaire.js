@@ -48,6 +48,7 @@ class CreateQuestionaire extends React.Component {
     this.removeQuestion = this.removeQuestion.bind(this);
     this.submitQuestionare = this.submitQuestionare.bind(this);
     this.submitQuestions = this.submitQuestions.bind(this);
+    this.goBackTo = this.goBackTo.bind(this);
   }
 
   questionsExt=[]
@@ -92,12 +93,10 @@ class CreateQuestionaire extends React.Component {
 
   submitQuestionare(){
     console.log(this.questionaireObj)
-    if(this.questionaireObj.questionaireCatogory===''){
-      alert("Please write questionaire Category")
-    }else if(this.questionaireObj.title===''){
+    if(this.questionaireObj.title===''){
       alert("Please write questionaire title")
     }
-    else if(this.questionaireObj.title!=='' && this.questionaireObj.questionaireCatogory!==''){
+    else if(this.questionaireObj.title!==''){
       axios.post('/graphql',{
         query: `mutation addQuestionaire($titleO: String!, $categoryO:String!, $userIdO:String!){
             addQuestionaire(title: $titleO , category: $categoryO, owner: $userIdO) {
@@ -117,6 +116,11 @@ class CreateQuestionaire extends React.Component {
         this.setState({succesMsg:'Questionaire created, Now add questions to it'})
       });
     }
+  }
+  goBackTo(){
+    setTimeout(() => {
+      this.props.history.push(`/l/allQuestionaires`)
+    }, 700);
   }
   async submitQuestions(){
     console.log(this.questionsExt)
@@ -140,6 +144,7 @@ class CreateQuestionaire extends React.Component {
           }).then((result) => {
             this.setState({succes:true})
             this.setState({succesMsg:'All Questions are added'})
+            this.goBackTo()
           });
         }
       }
@@ -198,10 +203,6 @@ class CreateQuestionaire extends React.Component {
                   <small style={{color:"red"}}>Submit this and on next step add questions</small>
                 <input type="text" className="form-control" id="questionaireName" placeholder="Enter Questionaire Title" onChange={this.handleQuestionaireName}/>
                 </div>
-                <div className="form-group">
-                <input type="text" className="form-control" id="questionaireCategory" placeholder="Enter Questionaire Category" onChange={this.handleQuestionaireCategory}/>
-                </div>
-
                 <br/>
                 <hr/><hr/>
                 <Button color="success" onClick={this.submitQuestionare}>

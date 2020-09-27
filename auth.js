@@ -55,6 +55,7 @@ module.exports = new class {
         try {
             decodedToken = jwt.verify(token, secret);
         } catch(err) {
+            console.log(err)
             req.isAuth = false;
             return next();
         }
@@ -136,6 +137,7 @@ module.exports = new class {
             try {
               User.findOne({_id: userId})
                 .then(user => {
+                    console.log(user)
                     if(user) {
                         if(!flag || (user.type !== 'super-admin' && user.type !== 'admin' && user.type !== 'user')) {
                             const error = new Error('not authenticated');
