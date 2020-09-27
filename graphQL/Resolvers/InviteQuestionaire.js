@@ -128,17 +128,16 @@ export const addInviteQuestionaire = async (parentValue, args, req) => {
       throw request_invalid;
     }
     try {
-      let permission = args.permission;
-      if(!permission || permission == '') {
-        const questionaire = await Questionaire.findOne({_id: args.questionaire});
-        if(questionaire) {
-          if(questionaire.owner == req.userId) {
-            permission = 'rw';
-          } else {
-            permission = 'r';
-          }
+      let permission
+      const questionaire = await Questionaire.findOne({_id: args.questionaire});
+      if(questionaire) {
+        if(questionaire.owner == req.userId) {
+          permission = 'r';
+        } else {
+          permission = 'rw';
         }
       }
+      
 
       const user = await User.findOne({email: args.email});
       if(user) {

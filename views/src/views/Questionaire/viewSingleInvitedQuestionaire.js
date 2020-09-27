@@ -313,18 +313,29 @@ class ViewInvitedQuestionaire extends React.Component {
     let result3
 
     result3 = await axios.post('/graphql',{
-      query: `mutation inviteUserToFillQuestionaire($questionaireO:String!, $permissionO:String, $emailO:String!){
-        inviteUserToFillQuestionaire(questionaire: $questionaireO,permission:$permissionO, email: $emailO) {
+      query: `mutation inviteUserToFillQuestionaire($questionaireO:String!, $emailO:String!){
+        inviteUserToFillQuestionaire(questionaire: $questionaireO, email: $emailO) {
           msg
         }
       }`,
         variables:{
           questionaireO:this.questionaireId,
           emailO:this.inviteEmail,
-          permissionO:this.invitePermission
         }
     });
-    if(result3){
+    if(result3.data.data.errors) {
+      if(result3.data.data.errors[0].message){
+      this.setState({errr:true});
+      this.setState({succes:false});
+      this.setState({errrMsg:result3.data.data.errors[0].message});
+      }
+      else{
+      this.setState({errr:true});
+      this.setState({succes:false});
+      this.setState({errrMsg:"Something went wrong"});
+      }
+      
+    }else if(result3.data.data.inviteUserToFillQuestionaire){
       this.setState({succes:true});
       this.setState({succesMsg:'User Invited Successfully'})
       this.setState({inviteBit:false})
@@ -362,11 +373,11 @@ class ViewInvitedQuestionaire extends React.Component {
               <input type="email" className="form-control" onChange={(event)=>this.handleInviteEmail(event)} aria-describedby="emailHelp" placeholder="Enter Email"/>
               <small id="emailHelp" className="form-text text-muted">Enter email to which you want to invite</small>
 
-              <select value={this.state.sinvitePermissio} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
+              {/* <select value={this.state.sinvitePermissio} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
                 <option >Select Permission</option>
                 <option value='r' >Read Only</option>
                 <option value='rw' >Read and Write</option>
-              </select>
+              </select> */}
               <Button color="success" round onClick={this.submitInvite}>
                 Send Invitation
               </Button>
@@ -384,21 +395,38 @@ class ViewInvitedQuestionaire extends React.Component {
         <option value={this.submittedAnswersList[index2].uId} key={index2}>{this.submittedAnswersList[index2].userName}</option>
       )
     }
-    if(this.state.submitBit && this.state.questionaires.permission==='rw'){
-      // this.setState({rwBit:true})
-      this.questionIdList=[]
-      for (let index = 0; index < this.state.questions.length; index++) {
-        this.questionIdList.push(this.state.questions[index].id)
-        divv.push(
-            <div className="form-group" key={index}>
-              <h4 style={{fontWeight:"bolder", textAlign:"left"}}>Question&nbsp;{index+1})&nbsp;&nbsp;{this.state.questions[index].question}</h4>
-              <input type="email" className="form-control" id={index} onBlur={(event)=>this.handleAnswerName(event,index)} aria-describedby="emailHelp" placeholder="Enter Answer"/>
-              <small id="emailHelp" className="form-text text-muted">Write answer for above question.</small>
-              <hr/>
-            </div>
-        )      
+    console.log(this.state.questionaires.permission)
+    console.log(this.state.submitBit)
+    if(this.state.submitBit){
+      if(this.state.questionaires.permission==='rw'){
+        // this.setState({rwBit:true})
+        this.questionIdList=[]
+        for (let index = 0; index < this.state.questions.length; index++) {
+          this.questionIdList.push(this.state.questions[index].id)
+          divv.push(
+              <div className="form-group" key={index}>
+                <h4 style={{fontWeight:"bolder", textAlign:"left"}}>Question&nbsp;{index+1})&nbsp;&nbsp;{this.state.questions[index].question}</h4>
+                <input type="email" className="form-control" id={index} onBlur={(event)=>this.handleAnswerName(event,index)} aria-describedby="emailHelp" placeholder="Enter Answer"/>
+                <small id="emailHelp" className="form-text text-muted">Write answer for above question.</small>
+                <hr/>
+              </div>
+          )      
+        }
+      }else if(this.state.questionaires.permission==='r'){
+        // this.setState({rwBit:false})
+          this.questionIdList=[]
+          for (let index = 0; index < this.state.questions.length; index++) {
+            this.questionIdList.push(this.state.questions[index].id)
+            divv.push(
+              <div className="form-group" key={index}>
+                <h4 style={{fontWeight:"bolder", textAlign:"left"}}>Question&nbsp;{index+1})&nbsp;&nbsp;{this.state.questions[index].question}</h4>
+                <hr/>
+              </div>
+          )     
+          }
       }
-    }else if(this.state.userBit){
+    }
+    else if(this.state.userBit){
       this.questionIdList=[]
       for (let index = 0; index < this.userSelectedAnswerList.length; index++) {
         this.questionIdList.push(this.userSelectedAnswerList[index].queId)
@@ -410,18 +438,6 @@ class ViewInvitedQuestionaire extends React.Component {
             </div>
         )      
       }
-    }else if(this.state.questionaires.permission==='r'){
-      // this.setState({rwBit:false})
-        this.questionIdList=[]
-        for (let index = 0; index < this.userSelectedAnswerList.length; index++) {
-          this.questionIdList.push(this.userSelectedAnswerList[index].queId)
-          divv.push(
-              <div className="form-group" key={index}>
-                <h4 style={{fontWeight:"bolder", textAlign:"left"}}>Question&nbsp;{index+1})&nbsp;&nbsp;{this.userSelectedAnswerList[index].queName}</h4>
-                <hr/>
-              </div>
-          )      
-        }
     }
     let subButton;
     let sendBut;

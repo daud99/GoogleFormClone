@@ -262,18 +262,30 @@ class ViewQuestionaire extends React.Component {
     let result3
 
     result3 = await axios.post('/graphql',{
-      query: `mutation inviteUserToFillQuestionaire($questionaireO:String!, $permissionO:String, $emailO:String!){
-        inviteUserToFillQuestionaire(questionaire: $questionaireO,permission:$permissionO, email: $emailO) {
+      query: `mutation inviteUserToFillQuestionaire($questionaireO:String!, $emailO:String!){
+        inviteUserToFillQuestionaire(questionaire: $questionaireO, email: $emailO) {
           msg
         }
       }`,
         variables:{
           questionaireO:this.questionaireId,
           emailO:this.inviteEmail,
-          permissionO:this.invitePermission
         }
     });
-    if(result3){
+    console.log(result3)
+    if(result3.data.data.errors) {
+      if(result3.data.data.errors[0].message){
+      this.setState({errr:true});
+      this.setState({succes:false});
+      this.setState({errrMsg:result3.data.data.errors[0].message});
+      }
+      else{
+      this.setState({errr:true});
+      this.setState({succes:false});
+      this.setState({errrMsg:"Something went wrong"});
+      }
+      
+    }else if(result3.data.data.inviteUserToFillQuestionaire){
       this.setState({succes:true});
       this.setState({succesMsg:'User Invited Successfully'})
       this.setState({inviteBit:false})
@@ -314,11 +326,11 @@ class ViewQuestionaire extends React.Component {
               <input type="email" className="form-control" onChange={(event)=>this.handleInviteEmail(event)} aria-describedby="emailHelp" placeholder="Enter Email"/>
               <small id="emailHelp" className="form-text text-muted">Enter email to which you want to invite</small>
 
-              <select value={this.state.sinvitePermissio} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
+              {/* <select value={this.state.sinvitePermissio} onChange={this.handleSelectedPermission} className="custom-select" id="permission">
                 <option >Select Permission</option>
                 <option value='r' >Read Only</option>
                 <option value='rw' >Read and Write</option>
-              </select>
+              </select> */}
               <Button color="success" round onClick={this.submitInvite}>
                 Send Invitation
               </Button>
