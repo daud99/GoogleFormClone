@@ -100,7 +100,7 @@ class ViewAllQuestionaire extends React.Component {
   }
   dateGet(numS){
     let dat=moment(numS,"x").format("DD MMM YYYY hh:mm a")
-    console.log(dat)
+    // console.log(dat)
     return dat
   }
   render() {

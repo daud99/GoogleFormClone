@@ -7,7 +7,7 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import { Link } from 'react-router-dom';
-
+var moment = require('moment');
 class ViewInvitedQuestionaire extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,7 @@ class ViewInvitedQuestionaire extends React.Component {
     };
     this.deleteQuestionaire = this.deleteQuestionaire.bind(this);
     this.regetQuestionaire = this.regetQuestionaire.bind(this);
-
+    this.dateGet = this.dateGet.bind(this);
   }
   componentWillMount() {
     axios.post('/graphql',{
@@ -173,6 +173,11 @@ class ViewInvitedQuestionaire extends React.Component {
       
     });
   }
+  dateGet(numS){
+    let dat=moment(numS,"x").format("DD MMM YYYY hh:mm a")
+    // console.log(dat)
+    return dat
+  }
 
   render() {
     let notifi;
@@ -184,10 +189,10 @@ class ViewInvitedQuestionaire extends React.Component {
     }
     for (let index = 0; index < this.state.questionaires.length; index++) {
       rows.push(<tr key={index}>
-        <td>{index}</td>
-        <td>{this.state.questionaires[index].questionaire.title}</td>
-        <td>{this.state.questionaires[index].questionaire.createdAt}</td>
-        <td>
+        <td style={{width:"10%"}}>{index}</td>
+        <td style={{width:"50%"}}>{this.state.questionaires[index].questionaire.title}</td>
+        <td style={{width:"20%"}}>{this.dateGet(this.state.questionaires[index].questionaire.createdAt)}</td>
+        <td style={{width:"20%"}}>
             <Button color="warning" round component={Link} to={`/invitedQuestionaire/${this.state.questionaires[index].id}`}>View</Button>
         </td>
       </tr>)
