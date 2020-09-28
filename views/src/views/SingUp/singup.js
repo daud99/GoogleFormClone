@@ -44,14 +44,9 @@ class SignUp extends React.Component {
 
   componentDidMount() {
     if(localStorage.getItem('token')){
-      console.log('Token found.')
-      this.props.history.push('/admin/dashboard')
+      this.props.history.push(`/l/allQuestionaires`)
     }else if(localStorage.getItem('localToken')){
-      console.log('Local Token found.')
-      this.props.history.push('/admin/dashboard')
-    }
-    else{
-      console.log('Not LoggedIN');
+      this.props.history.push(`/l/allQuestionaires`)
     }
   }
   
@@ -81,10 +76,8 @@ class SignUp extends React.Component {
       password2:this.data.password2
     },()=>{
       // const user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
-      // console.log(user);
       // axios.post('/graphQL', user)
       // .then(res => {
-      //   console.log(res.data);
       //   if(res.data.msg){
       //     this.setState({errr:false});
       //     this.setState({succes:true});
@@ -105,7 +98,6 @@ class SignUp extends React.Component {
       axios.post('/graphql',{
         query: q
       }).then((result) => {
-        console.log(result.data)
         if(result.data.data.addUser) {
           if(result.data.data.addUser.email) {
             this.setState({errr:false});

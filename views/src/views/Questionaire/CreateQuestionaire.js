@@ -83,16 +83,13 @@ class CreateQuestionaire extends React.Component {
       this.setState({questions:this.questionsExt});
       this.listOfQuestions=[]
       this.questionVal=' '
-      console.log(this.questionsExt)
     }
   }
 
   removeQuestion(index){
-    console.log(index)
   }
 
   submitQuestionare(){
-    console.log(this.questionaireObj)
     if(this.questionaireObj.title===''){
       alert("Please write questionaire title")
     }
@@ -123,11 +120,9 @@ class CreateQuestionaire extends React.Component {
     }, 700);
   }
   async submitQuestions(){
-    console.log(this.questionsExt)
     if(this.questionsExt.length>0){
       for (let index = 0; index < this.questionsExt.length; index++) {
         if(this.questionsExt[index].titleQ !== ''){
-          console.log('a raha hai')
           await axios.post('/graphql',{
             query: `mutation addQuestion($questionO: String!, $categoryO:String!, $userIdO:String!, $questionaireO:String!){
               addQuestion(question: $questionO , category: $categoryO, user: $userIdO, questionaire: $questionaireO) {
@@ -201,12 +196,12 @@ class CreateQuestionaire extends React.Component {
       cardBod=<CardBody>
                 <div className="form-group">
                   <small style={{color:"red"}}>Submit this and on next step add questions</small>
-                <input type="text" className="form-control" id="questionaireName" placeholder="Enter Questionaire Title" onChange={this.handleQuestionaireName}/>
+                <input type="text" className="form-control" id="questionaireName" placeholder="Enter Questionnaire Title" onChange={this.handleQuestionaireName}/>
                 </div>
                 <br/>
                 <hr/><hr/>
                 <Button color="success" onClick={this.submitQuestionare}>
-                    Submit Questionaire
+                    Submit Questionnaire
                 </Button>
             </CardBody>
     }

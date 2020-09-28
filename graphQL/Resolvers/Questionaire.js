@@ -39,7 +39,7 @@ export const getAllQuestionaire = async (parentValue, args, req) => {
     throw request_invalid;
   }
   if(args.category) {
-    return await Questionaire.find({category: args.category});
+    return await Questionaire.find({});
   }
   return await Questionaire.find({});
 }

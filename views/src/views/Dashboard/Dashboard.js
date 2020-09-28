@@ -37,17 +37,14 @@ class Dashboard extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('COMPONENT UPDATED')
     return true
   }
   createForm(){
-    console.log('hhhhhhhh');
     let data={name:'Usman',age:"111"}
     if(localStorage.getItem("tokenid")){
       data.tokenID=localStorage.getItem("tokenid");
     }
     axios.post('/user/testing',data).then(response=>{
-      console.log(response)
     })
   }
 

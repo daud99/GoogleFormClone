@@ -47,22 +47,15 @@ class passwordReset extends Component {
 
   componentDidMount() {
     if(localStorage.getItem('token')){
-      console.log('Token found.')
-      this.props.history.push('/admin/dashboard')
+      this.props.history.push(`/l/allQuestionaires`)
     }else if(localStorage.getItem('localToken')){
-      console.log('Local Token found.')
-      this.props.history.push('/admin/dashboard')
-    }
-    else{
-      console.log('Not LoggedIN');
+      this.props.history.push(`/l/allQuestionaires`)
     }
   }
   componentWillMount(){
-    console.log(this.props.match.params)
     this.tokenE=this.props.match.params.token
   }
   verifyE(){
-    console.log(this.tokenE)
     if(this.data.password!==this.data.password2){
         alert("BOTH PASSWORDS DIDNOT MATCH")
     }else if(this.data.password2==='' || this.data.password===''){
@@ -76,7 +69,6 @@ class passwordReset extends Component {
         axios.post('/graphql',{
         query: q
         }).then((result) => {
-        console.log(result.data)
         if(result.data.data.updateRecoverPassword) {
             if(result.data.data.updateRecoverPassword.msg) {
             this.setState({errr:false});
