@@ -322,7 +322,7 @@ class UserP extends React.Component {
                 </CardBody>
               </Card>
             </GridItem>
-            <GridItem xs={12} sm={12} md={8}>
+            {/* <GridItem xs={12} sm={12} md={8}>
               <Card>
                 <CardHeader color="primary">
                   <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
@@ -334,7 +334,7 @@ class UserP extends React.Component {
                   <div className="form-group">
                     <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={this.state.userEmailp} placeholder={this.state.userProfile.email}  onChange={this.handleEmail}/>
                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                  </div>
+                  </div> */}
                   {/* <div className="form-group">
                     <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
                   </div>
@@ -345,9 +345,9 @@ class UserP extends React.Component {
                   {/* <Button color="success" onClick={this.register}>
                       Update
                   </Button> */}
-                </CardBody>
+                {/* </CardBody>
               </Card>
-            </GridItem>
+            </GridItem> */}
           </GridContainer>
                     
         </div>

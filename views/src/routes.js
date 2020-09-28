@@ -27,6 +27,7 @@ import UserProfile from "views/UserProfile/UserProfile";
 import CreateQuestionaire from "views/Questionaire/CreateQuestionaire";
 import ViewAllQuestionaire from "views/Questionaire/viewQuestionaires";
 import ViewInvitedQuestionaire from "views/Questionaire/viewInvitedQuestionaire";
+import ViewQuestionnaireForAdmin from "views/Questionaire/viewAllForAdmin";
 
 let adminDashboardRoutes=[];
 if(localStorage.getItem('token') || localStorage.getItem('localToken')){
@@ -67,6 +68,17 @@ if(localStorage.getItem('token') || localStorage.getItem('localToken')){
         layout: "/l"
       }
     ];
+}
+if(localStorage.getItem("type")==="super-admin"||localStorage.getItem("type")==="admin"){
+  adminDashboardRoutes.push(
+    {
+      path: "/allUserQuestionnaires",
+      name: "All User Questionnaires",
+      icon: Pages,
+      component: ViewQuestionnaireForAdmin,
+      layout: "/l"
+    }
+  )
 }
 
 

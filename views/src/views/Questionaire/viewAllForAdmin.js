@@ -8,7 +8,7 @@ import CardBody from "components/Card/CardBody.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import { Link } from 'react-router-dom';
 var moment = require('moment');
-class ViewAllQuestionaire extends React.Component {
+class ViewQuestionnaireForAdmin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,8 +44,8 @@ class ViewAllQuestionaire extends React.Component {
   }
   componentWillMount() {
     axios.post('/graphql',{
-        query: `query getQuestionairesOfOwner($userIdO:String!){
-            getQuestionairesOfOwner(owner: $userIdO) {
+        query: `query getAllQuestionaires($userIdO:String!){
+            getAllQuestionaires(owner: $userIdO) {
                 id,
                 title,
                 category,
@@ -57,20 +57,20 @@ class ViewAllQuestionaire extends React.Component {
           }
       }).then((result) => {
         if(result.data.data.errors) {
-          if(result.data.data.errors[0].message){
-          this.setState({errr:true});
-          this.setState({succes:false});
-          this.setState({errrMsg:result.data.data.errors[0].message});
+            if(result.data.data.errors[0].message){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:result.data.data.errors[0].message});
+            }
+            else{
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:"Something went wrong"});
+            }
+            
+          }else{
+            this.setState({questionaires:result.data.data.getAllQuestionaires})
           }
-          else{
-          this.setState({errr:true});
-          this.setState({succes:false});
-          this.setState({errrMsg:"Something went wrong"});
-          }
-          
-        }else{
-          this.setState({questionaires:result.data.data.getQuestionairesOfOwner})
-        }
         // console.log(result.data.data.getQuestionairesOfOwner)
         
         // this.setState({succes:true})
@@ -79,8 +79,8 @@ class ViewAllQuestionaire extends React.Component {
   }
   regetQuestionaire(){
     axios.post('/graphql',{
-      query: `query getQuestionairesOfOwner($userIdO:String!){
-          getQuestionairesOfOwner(owner: $userIdO) {
+      query: `query getAllQuestionaires($userIdO:String!){
+        getAllQuestionaires(owner: $userIdO) {
               id,
               title,
               category,
@@ -91,7 +91,7 @@ class ViewAllQuestionaire extends React.Component {
           userIdO:localStorage.getItem('useId')
         }
     }).then((result) => {
-      this.setState({questionaires:result.data.data.getQuestionairesOfOwner})
+      this.setState({questionaires:result.data.data.getAllQuestionaires})
       // this.setState({succes:true})
       // this.setState({succesMsg:'Questionaire created, Now add questions to it'})
     });
@@ -127,20 +127,20 @@ class ViewAllQuestionaire extends React.Component {
       notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
     }
     if(this.state.questionaires){
-      if(this.state.questionaires.length>0){
-          for (let index = 0; index < this.state.questionaires.length; index++) {
-              rows.push(<tr key={index}>
-                <td style={{width:"10%"}}>{index}</td>
-                <td style={{width:"50%"}}>{this.state.questionaires[index].title}</td>
-                <td style={{width:"20%"}}>{this.dateGet(this.state.questionaires[index].createdAt)}</td>
-                <td style={{width:"20%"}}>
-                    <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
-                    {/* <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button> */}
-                </td>
-              </tr>)
-            }
-      }
-  }
+        if(this.state.questionaires.length>0){
+            for (let index = 0; index < this.state.questionaires.length; index++) {
+                rows.push(<tr key={index}>
+                  <td style={{width:"10%"}}>{index}</td>
+                  <td style={{width:"50%"}}>{this.state.questionaires[index].title}</td>
+                  <td style={{width:"20%"}}>{this.dateGet(this.state.questionaires[index].createdAt)}</td>
+                  <td style={{width:"20%"}}>
+                      <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
+                      {/* <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button> */}
+                  </td>
+                </tr>)
+              }
+        }
+    }
 
     return (
       <div style={{paddingLeft:'20px', paddingRight:'40px'}}>
@@ -172,4 +172,4 @@ class ViewAllQuestionaire extends React.Component {
 }
 
 
-export default ViewAllQuestionaire
+export default ViewQuestionnaireForAdmin
