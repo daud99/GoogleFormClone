@@ -38,9 +38,6 @@ export const getAllQuestionaire = async (parentValue, args, req) => {
   if(request_invalid) {
     throw request_invalid;
   }
-  if(args.category) {
-    return await Questionaire.find({category: args.category});
-  }
   return await Questionaire.find({});
 }
 

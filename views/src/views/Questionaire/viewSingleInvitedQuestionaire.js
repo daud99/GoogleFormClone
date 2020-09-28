@@ -129,7 +129,6 @@ class ViewInvitedQuestionaire extends React.Component {
         }else if(result.data.data.getInviteQuestionaireById){
           this.currentQuestionaireId=result.data.data.getInviteQuestionaireById.questionaire.id
           this.setState({questionaires:result.data.data.getInviteQuestionaireById})
-          console.log(result.data.data.getInviteQuestionaireById)
           if(this.state.questionaires.permission==='rw'){
             this.setState({rwBit:true})
           }else{
@@ -253,7 +252,6 @@ class ViewInvitedQuestionaire extends React.Component {
           
         }
         // .then((result) => {
-        //   console.log(result)
         //   this.setState({succes:true})
         // });
       }
@@ -271,7 +269,8 @@ class ViewInvitedQuestionaire extends React.Component {
   }
   goBackTo(){
     setTimeout(() => {
-      this.props.history.push(`/l/invitedQuestionaires`)
+      // this.props.history.push(`/l/allQuestionaires`)
+      window.history.back();
     }, 700);
   }
   onUserClick(event){
@@ -395,8 +394,6 @@ class ViewInvitedQuestionaire extends React.Component {
         <option value={this.submittedAnswersList[index2].uId} key={index2}>{this.submittedAnswersList[index2].userName}</option>
       )
     }
-    console.log(this.state.questionaires.permission)
-    console.log(this.state.submitBit)
     if(this.state.submitBit){
       if(this.state.questionaires.permission==='rw'){
         // this.setState({rwBit:true})

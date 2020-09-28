@@ -57,7 +57,7 @@ const query = new GraphQLObjectType({
     getAllQuestionaires: {
       type: new graphql.GraphQLList(QuestionaireType),
       args: {
-        category: {
+        owner: {
           type: GraphQLString
         }
       },

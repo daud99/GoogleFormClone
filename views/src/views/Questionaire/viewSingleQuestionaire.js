@@ -118,7 +118,6 @@ class ViewQuestionaire extends React.Component {
           
         }else if(result.data.data.getQuestionaireByID){
           this.setState({questionaires:result.data.data.getQuestionaireByID})
-          console.log(result.data.data.getQuestionaireByID)
           if(result.data.data.getQuestionaireByID.owner._id===localStorage.getItem("useId")){
             this.setState({isowner:true})
           }else{
@@ -207,7 +206,6 @@ class ViewQuestionaire extends React.Component {
           this.setState({succesMsg:'Answers submited successfully'})
         }
         // .then((result) => {
-        //   console.log(result)
         //   this.setState({succes:true})
         // });
       }
@@ -272,7 +270,6 @@ class ViewQuestionaire extends React.Component {
           emailO:this.inviteEmail,
         }
     });
-    console.log(result3)
     if(result3.data.data.errors) {
       if(result3.data.data.errors[0].message){
       this.setState({errr:true});
@@ -294,7 +291,8 @@ class ViewQuestionaire extends React.Component {
   }
   goBackTo(){
     setTimeout(() => {
-      this.props.history.push(`/l/allQuestionaires`)
+      // this.props.history.push(`/l/allQuestionaires`)
+      window.history.back();
     }, 700);
   }
   render() {

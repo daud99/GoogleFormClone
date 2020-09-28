@@ -94,10 +94,8 @@ class UserP extends React.Component {
       // }
       user = {name:this.state.name,email:this.state.email};
 
-      console.log(user);
       axios.patch('/user/update', user)
       .then(res => {
-        console.log(res.data);
         if(res.data.msg){
           this.setState({errr:false});
           this.setState({succes:true});
@@ -137,7 +135,6 @@ class UserP extends React.Component {
   
    if (err !== '') { // if message not same old that mean has error 
         event.target.value = null // discard selected file
-        console.log(err)
          return false; 
     }
    return true;
@@ -154,7 +151,6 @@ class UserP extends React.Component {
   }
   onClickHandler = () => {
     axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
-    console.log(this.state.selectedFile)
     const data = new FormData() 
     data.append('photo', this.state.selectedFile)
     axios.patch("/userImage/add", data, {
@@ -164,7 +160,6 @@ class UserP extends React.Component {
         })}
       })
       .then(res => {
-        console.log(res.data);
         if(res.data.photo){
           this.setState({profilePhotoVar:url1.apiURL+'/'+res.data.photo})
         }
@@ -229,7 +224,6 @@ class UserP extends React.Component {
             $idO:"null"
           }
       }).then((result) => {
-        console.log(result.data)
         this.setState({userProfile:result.data.data.getUserByID});
         this.data.name=result.data.data.getUserByID.name;
         this.data.email=result.data.data.getUserByID.email;
@@ -328,7 +322,7 @@ class UserP extends React.Component {
                 </CardBody>
               </Card>
             </GridItem>
-            <GridItem xs={12} sm={12} md={8}>
+            {/* <GridItem xs={12} sm={12} md={8}>
               <Card>
                 <CardHeader color="primary">
                   <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
@@ -340,7 +334,7 @@ class UserP extends React.Component {
                   <div className="form-group">
                     <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={this.state.userEmailp} placeholder={this.state.userProfile.email}  onChange={this.handleEmail}/>
                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                  </div>
+                  </div> */}
                   {/* <div className="form-group">
                     <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
                   </div>
@@ -351,9 +345,9 @@ class UserP extends React.Component {
                   {/* <Button color="success" onClick={this.register}>
                       Update
                   </Button> */}
-                </CardBody>
+                {/* </CardBody>
               </Card>
-            </GridItem>
+            </GridItem> */}
           </GridContainer>
                     
         </div>
