@@ -98,7 +98,7 @@ const AdminComponent = function Admin({ ...rest }) {
       {/* {redir() ? <Redirect to="/login" /> : null} */}
       <Sidebar
         routes={routes}
-        logoText={"New Project"}
+        logoText={"Questionnaire"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}

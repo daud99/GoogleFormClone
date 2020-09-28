@@ -47,21 +47,21 @@ if(localStorage.getItem('token') || localStorage.getItem('localToken')){
       },
       {
         path: "/createQuestionaire",
-        name: "Create Questionaire",
+        name: "Create Questionnaire",
         icon: Assignment,
         component: CreateQuestionaire,
         layout: "/l"
       },
       {
         path: "/allQuestionaires",
-        name: "All Questionaires",
+        name: "All Questionnaires",
         icon: Pages,
         component: ViewAllQuestionaire,
         layout: "/l"
       },
       {
         path: "/invitedQuestionaires",
-        name: "Invited Questionaires",
+        name: "Invited Questionnaires",
         icon: Pages,
         component: ViewInvitedQuestionaire,
         layout: "/l"

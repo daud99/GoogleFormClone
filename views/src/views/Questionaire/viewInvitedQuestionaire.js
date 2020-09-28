@@ -71,7 +71,6 @@ class ViewInvitedQuestionaire extends React.Component {
             userIdO:localStorage.getItem('useId')
           }
       }).then((result) => {
-        console.log(result.data.data.getInviteQuestionaireForReceiver)
         if(result.data.errors) {
           if(result.data.errors[0].message){
           this.setState({errr:true});
@@ -184,13 +183,12 @@ class ViewInvitedQuestionaire extends React.Component {
       notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
     }
     for (let index = 0; index < this.state.questionaires.length; index++) {
-      rows.push(<tr key={index} className="d-flex">
-        <td className="col-1">{index}</td>
-        <td className="col-5">{this.state.questionaires[index].questionaire.title}</td>
-        <td className="col-2">{this.state.questionaires[index].questionaire.createdAt}</td>
-        <td className="col-4">
+      rows.push(<tr key={index}>
+        <td>{index}</td>
+        <td>{this.state.questionaires[index].questionaire.title}</td>
+        <td>{this.state.questionaires[index].questionaire.createdAt}</td>
+        <td>
             <Button color="warning" round component={Link} to={`/invitedQuestionaire/${this.state.questionaires[index].id}`}>View</Button>
-            <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id,this.state.questionaires[index].senderId._id,this.state.questionaires[index].receiverId._id)}>Delete</Button>
         </td>
       </tr>)
     }
@@ -202,13 +200,13 @@ class ViewInvitedQuestionaire extends React.Component {
           {/* <GridItem xs={12} sm={12} md={12} lg={12}> */}
             <Card>
                 <CardBody>
-                <table className="table table-responsive table-hover">
+                <table className="table table-hover">
                   <thead className="thead-dark">
-                    <tr className="d-flex">
-                      <th scope="col" className="col-1">#</th>
-                      <th scope="col" className="col-5">Title</th>
-                      <th scope="col" className="col-2">CreatedAt</th>
-                      <th scope="col" style={{textAlign:"center"}} className="col-4">Action</th>
+                    <tr>
+                      <th scope="col" style={{width:"10%"}}>#</th>
+                      <th scope="col" style={{width:"50%"}}>Title</th>
+                      <th scope="col" style={{width:"20%"}}>CreatedAt</th>
+                      <th scope="col" style={{width:"20%"}}>Action</th>
                     </tr>
                   </thead>
                   <tbody>

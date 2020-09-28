@@ -56,14 +56,9 @@ class Login extends Component {
 
   componentDidMount() {
     if(localStorage.getItem('token')){
-      console.log('Token found.')
       this.props.history.push('/admin/dashboard')
     }else if(localStorage.getItem('localToken')){
-      console.log('Local Token found.')
       this.props.history.push('/admin/dashboard')
-    }
-    else{
-      console.log('Not LoggedIN');
     }
   }
   resetEmail=''
@@ -79,13 +74,11 @@ class Login extends Component {
   }
   // local login
   loginMethod=()=> {
-    console.log(window.location.href)
     this.setState({
       email:this.data.email,
       password:this.data.password,
     },()=>{
       const user = {email:this.state.email,password:this.state.password};
-      console.log(user);
       let q = `query {
         login(email: "${user.email}", password: "${user.password}"){
           userId
@@ -120,7 +113,7 @@ class Login extends Component {
                   this.props.onUserTypeGet(res.data.data.login.type);
 
                   setTimeout(() => {
-                    this.props.history.push(`/admin/dashboard`)
+                    this.props.history.push(`/l/allQuestionaires`)
                   }, 700)
           } else {
             this.setState({errr:true});
@@ -144,7 +137,6 @@ class Login extends Component {
       });
     //   axios.post('/user/login', user)
     //   .then(res => {
-    //     // console.log(res.data);
     //     if(res.data.msg){
     //       this.setState({errr:false});
     //       this.setState({succes:true});
@@ -179,7 +171,6 @@ class Login extends Component {
   // --------------------------------------
 
   responseGoogleSuccess =(response)=>{
-    console.log(response)
     let q = `query {
       googleLogin(tokenID: "${response.tokenId}"){
         userId
@@ -221,7 +212,7 @@ class Login extends Component {
           this.props.onUserTypeGet(res.data.data.googleLogin.type);
 
           setTimeout(() => {
-            this.props.history.push(`/admin/dashboard`)
+            this.props.history.push(`/l/allQuestionaires`)
           }, 500);
         } else{
           this.setState({errr:true});
@@ -235,7 +226,6 @@ class Login extends Component {
       }
     });
     // axios.post('/user/googleLogin',{tokenID:response.tokenId}).then(respon=>{
-    //   console.log(respon);
     //   if(respon.data.token){
     //     this.setState({errr:false});
     //     this.setState({succes:true});
@@ -269,7 +259,6 @@ class Login extends Component {
   }
 
   responseGoogleFail =(response)=>{
-    console.log(response);
     this.setState({errr:true});
     this.setState({succes:false});
     this.setState({errrMsg:'Something went wrong'});
@@ -293,7 +282,6 @@ class Login extends Component {
           axios.post('/graphql',{
           query: q
           }).then((result) => {
-          console.log(result.data)
           if(result.data.data.sendRecoveryEmail) {
               if(result.data.data.sendRecoveryEmail.msg) {
               this.setState({errr:false});
