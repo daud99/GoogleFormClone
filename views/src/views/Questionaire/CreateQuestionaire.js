@@ -107,10 +107,25 @@ class CreateQuestionaire extends React.Component {
             userIdO:localStorage.getItem('useId')
           }
       }).then((result) => {
-        this.questionaireId=result.data.data.addQuestionaire.id;
-        this.setState({allowQuestionAdd:true})
-        this.setState({succes:true})
-        this.setState({succesMsg:'Questionaire created, Now add questions to it'})
+        if(result.data.data.errors) {
+          if(result.data.data.errors[0].message){
+          this.setState({errr:true});
+          this.setState({succes:false});
+          this.setState({errrMsg:result.data.data.errors[0].message});
+          }
+          else{
+          this.setState({errr:true});
+          this.setState({succes:false});
+          this.setState({errrMsg:"Something went wrong"});
+          }
+          
+        }else if(result.data.data.addQuestionaire){
+          this.questionaireId=result.data.data.addQuestionaire.id;
+          this.setState({allowQuestionAdd:true})
+          this.setState({succes:true})
+          this.setState({succesMsg:'Questionaire created, Now add questions to it'})
+        }
+        
       });
     }
   }
@@ -137,9 +152,24 @@ class CreateQuestionaire extends React.Component {
                 questionaireO:this.questionaireId
               }
           }).then((result) => {
-            this.setState({succes:true})
-            this.setState({succesMsg:'All Questions are added'})
-            this.goBackTo()
+            if(result.data.data.errors) {
+              if(result.data.data.errors[0].message){
+              this.setState({errr:true});
+              this.setState({succes:false});
+              this.setState({errrMsg:result.data.data.errors[0].message});
+              }
+              else{
+              this.setState({errr:true});
+              this.setState({succes:false});
+              this.setState({errrMsg:"Something went wrong"});
+              }
+              
+            }else{
+              this.setState({succes:true})
+              this.setState({succesMsg:'All Questions are added'})
+              this.goBackTo()
+            }
+            
           });
         }
       }
