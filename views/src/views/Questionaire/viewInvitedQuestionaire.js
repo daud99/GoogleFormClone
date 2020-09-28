@@ -84,7 +84,6 @@ class ViewInvitedQuestionaire extends React.Component {
           }
           this.setState({viewbit:false})
         }else if(result.data.data.getInviteQuestionaireForReceiver){
-          console.log(result.data.data.getInviteQuestionaireForReceiver)
           this.setState({questionaires:result.data.data.getInviteQuestionaireForReceiver})
           this.setState({viewbit:true})
         }
@@ -135,7 +134,6 @@ class ViewInvitedQuestionaire extends React.Component {
           }
           this.setState({viewbit:false})
         }else if(result.data.data.getInviteQuestionaireForReceiver){
-          console.log(result.data.data.getInviteQuestionaireForReceiver)
           this.setState({questionaires:result.data.data.getInviteQuestionaireForReceiver})
           this.setState({viewbit:true})
         }
