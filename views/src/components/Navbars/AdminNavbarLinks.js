@@ -90,16 +90,20 @@ const AdminNavbarLinks = (props) => {
               Logout
               </MenuItem>
   }else if(localStorage.getItem("token")){
-    logoutBut=<GoogleLogout
+    logoutBut=
+                <MenuItem
+                className={classes.dropdownItem}
+              >
+              <GoogleLogout
                 clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
                 render={renderProps => (
-                  <MenuItem onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</MenuItem>
+                  <small style={{fontSize:"14px"}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</small>
                 )}
                 buttonText='Logout'
                 onLogoutSuccess={ logout }
                 onFailure={ handleLogoutFailure }
               >
-              </GoogleLogout>
+              </GoogleLogout></MenuItem>
   }
 
   return (
