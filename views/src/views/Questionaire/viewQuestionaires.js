@@ -135,7 +135,7 @@ class ViewAllQuestionaire extends React.Component {
                 <td style={{width:"20%"}}>{this.dateGet(this.state.questionaires[index].createdAt)}</td>
                 <td style={{width:"20%"}}>
                     <Button color="warning" round component={Link} to={`/questionaire/${this.state.questionaires[index].id}`}>View</Button>
-                    {/* <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button> */}
+                    <Button color="danger" round onClick={()=>this.deleteQuestionaire(this.state.questionaires[index].id)}>Delete</Button>
                 </td>
               </tr>)
             }
