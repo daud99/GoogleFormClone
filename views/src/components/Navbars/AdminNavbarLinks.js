@@ -90,23 +90,16 @@ const AdminNavbarLinks = (props) => {
               Logout
               </MenuItem>
   }else if(localStorage.getItem("token")){
-    logoutBut=
-      <MenuItem
-        // disabled={
-        //   document.getElementsByClassName('specialFetchingClass')[0] ?
-        //   document.getElementsByClassName('specialFetchingClass')[0].getAttribute('disabled') === null
-        //   : true
-        // }
-        onClick={() => {
-          // console.log(document.getElementsByClassName('specialFetchingClass')[0].getAttribute('disabled') === null)
-          if (document.getElementsByClassName('specialFetchingClass')[0] && document.getElementsByClassName('specialFetchingClass')[0].getAttribute('disabled') === null) {
-            document.getElementsByClassName('specialFetchingClass')[0].click()
-          }
-        }}
-        className={classes.dropdownItem}
-      >
-      Logout
-      </MenuItem>
+    logoutBut=<GoogleLogout
+                clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
+                render={renderProps => (
+                  <MenuItem onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</MenuItem>
+                )}
+                buttonText='Logout'
+                onLogoutSuccess={ logout }
+                onFailure={ handleLogoutFailure }
+              >
+              </GoogleLogout>
   }
 
   return (
@@ -165,19 +158,6 @@ const AdminNavbarLinks = (props) => {
                       Profile
                     </MenuItem>
                     <Divider light />
-                    {/* <div style={{display: "none"}}> */}
-                      <GoogleLogout
-                        icon={false}
-                        tag='li'
-                        // disabledStyle={{display: "none"}}
-                        className="specialFetchingClass MuiButtonBase-root MuiListItem-root MuiMenuItem-root makeStyles-dropdownItem-78 MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button"
-                        clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
-                        buttonText='Logout'
-                        onLogoutSuccess={ logout }
-                        onFailure={ handleLogoutFailure }
-                      >
-                      </GoogleLogout>
-                    {/* </div> */}
                     {/* <Link to="/login"> */}
                     {logoutBut}
                     {/* </Link>  */}
