@@ -81,6 +81,7 @@ const AdminNavbarLinks = (props) => {
   const handleLogoutFailure =(response)=> {
     alert('Failed to log out')
   }
+
   let logoutBut;
   if(localStorage.getItem("localToken")){
     logoutBut=<MenuItem
@@ -91,19 +92,17 @@ const AdminNavbarLinks = (props) => {
               </MenuItem>
   }else if(localStorage.getItem("token")){
     logoutBut=
-                <MenuItem
-                className={classes.dropdownItem}
-              >
-              <GoogleLogout
-                clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
-                render={renderProps => (
-                  <small style={{fontSize:"14px"}} onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</small>
-                )}
-                buttonText='Logout'
-                onLogoutSuccess={ logout }
-                onFailure={ handleLogoutFailure }
-              >
-              </GoogleLogout></MenuItem>
+    <GoogleLogout
+      icon={false}
+      tag='li'
+      // disabledStyle={{display: "none"}}
+      className="specialFetchingClass MuiButtonBase-root MuiListItem-root MuiMenuItem-root makeStyles-dropdownItem-78 MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button"
+      clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
+      buttonText='Logout'
+      onLogoutSuccess={ logout }
+      onFailure={ handleLogoutFailure }
+    >
+    </GoogleLogout>
   }
 
   return (
@@ -162,22 +161,7 @@ const AdminNavbarLinks = (props) => {
                       Profile
                     </MenuItem>
                     <Divider light />
-                    {/* <div style={{display: "none"}}> */}
-                      <GoogleLogout
-                        icon={false}
-                        tag='li'
-                        // disabledStyle={{display: "none"}}
-                        className="specialFetchingClass MuiButtonBase-root MuiListItem-root MuiMenuItem-root makeStyles-dropdownItem-78 MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button"
-                        clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
-                        buttonText='Logout'
-                        onLogoutSuccess={ logout }
-                        onFailure={ handleLogoutFailure }
-                      >
-                      </GoogleLogout>
-                    {/* </div> */}
-                    {/* <Link to="/login"> */}
                     {logoutBut}
-                    {/* </Link>  */}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
