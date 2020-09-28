@@ -269,7 +269,8 @@ class ViewInvitedQuestionaire extends React.Component {
   }
   goBackTo(){
     setTimeout(() => {
-      this.props.history.push(`/l/invitedQuestionaires`)
+      // this.props.history.push(`/l/allQuestionaires`)
+      window.history.back();
     }, 700);
   }
   onUserClick(event){

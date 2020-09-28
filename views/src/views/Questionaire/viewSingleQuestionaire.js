@@ -291,7 +291,8 @@ class ViewQuestionaire extends React.Component {
   }
   goBackTo(){
     setTimeout(() => {
-      this.props.history.push(`/l/allQuestionaires`)
+      // this.props.history.push(`/l/allQuestionaires`)
+      window.history.back();
     }, 700);
   }
   render() {
