@@ -318,7 +318,7 @@ class ViewInvitedQuestionaire extends React.Component {
         }
       }`,
         variables:{
-          questionaireO:this.questionaireId,
+          questionaireO:this.currentQuestionaireId,
           emailO:this.inviteEmail,
         }
     });
