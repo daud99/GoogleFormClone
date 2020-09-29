@@ -1,4 +1,5 @@
 import _, { result } from 'lodash'
+import InviteQuestionaireSchema from '../../models/InviteQuestionaireSchema'
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {OAuth2Client} = require('google-auth-library')
@@ -14,6 +15,7 @@ const EmailConfig = require("../../config/email");
 const Misc = require("../../common/misc");
 
 const Questionaire = require('../../models/QuestionaireSchema');
+const InviteQuestionaire = require('../../models/InviteQuestionaireSchema');
 const Question = require('../../models/QuestionSchema');
 const Answer = require('../../models/AnswerSchema');
 const  User = require('../../models/User');
@@ -283,11 +285,19 @@ export const verifyUser = async (parentValue, args) => {
   }
 
   var user = await User.findOne({ resetPasswordToken: args.token }).exec();
-
   if(!user) {
     return new Error("Could not find active user by the token.");
   }
 
+  var inviteQuestionaires = await InviteQuestionaire.find({invitedUserEmail: user.email});
+
+  if(inviteQuestionaires.length > 0) {
+    for (const each in inviteQuestionaires) {
+      inviteQuestionaires[each].receiverId = user.id;
+      await inviteQuestionaires[each].save(); 
+    }
+  }
+  
   user.verify = true;
   user.resetPasswordToken = undefined;
   user.resetPasswordExpires = undefined;
