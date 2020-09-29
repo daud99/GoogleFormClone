@@ -14,6 +14,7 @@ import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 // import {Progress} from 'reactstrap';
 import url1 from '../../config.js';
 import avatar from "assets/img/faces/marc1.jpg";
+var moment = require('moment');
 class UserP extends React.Component {
   constructor(props) {
     super(props);
@@ -59,6 +60,7 @@ class UserP extends React.Component {
       gooleLogin:false,
       locallogin:false
     }
+    this.dateGet = this.dateGet.bind(this);
   }
   data={name:'',
   email:'',
@@ -178,6 +180,11 @@ class UserP extends React.Component {
         }
       })
   }
+  dateGet(numS){
+    let dat=moment(numS,"x").format("DD MMM YYYY hh:mm a")
+    // console.log(dat)
+    return dat
+  }
   componentWillMount(){
     if(localStorage.getItem('token')){
       if(localStorage.getItem('name')){
@@ -278,7 +285,7 @@ class UserP extends React.Component {
                 <CardBody profile>
                   <h6 className={classes.cardCategory}>{this.state.nameV}</h6>
                   <h4 className={classes.cardTitle}>{this.state.emailV}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt || this.state.createdAtV}</p>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.dateGet(this.state.userProfile.updatedAt || this.state.createdAtV)}</p>
                   <Button color="info" round onClick={()=>this.setImageInpN()}>
                   {this.state.userProfile.type||this.state.typeV}
                   </Button>
