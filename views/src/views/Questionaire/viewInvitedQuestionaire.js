@@ -76,11 +76,17 @@ class ViewInvitedQuestionaire extends React.Component {
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:result.data.errors[0].message});
-          }
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
+        }
           else{
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:"Something went wrong"});
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
           }
           this.setState({viewbit:false})
         }else if(result.data.data.getInviteQuestionaireForReceiver){
@@ -126,11 +132,17 @@ class ViewInvitedQuestionaire extends React.Component {
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:result.data.errors[0].message});
-          }
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
+        }
           else{
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:"Something went wrong"});
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
           }
           this.setState({viewbit:false})
         }else if(result.data.data.getInviteQuestionaireForReceiver){
@@ -159,16 +171,25 @@ class ViewInvitedQuestionaire extends React.Component {
         this.setState({errr:true});
         this.setState({succes:false});
         this.setState({errrMsg:result.data.errors[0].message});
-        }
+        setTimeout(() => {
+          this.setState({errr:false});
+        }, 5000);
+      }
         else{
         this.setState({errr:true});
         this.setState({succes:false});
         this.setState({errrMsg:"Something went wrong"});
+        setTimeout(() => {
+          this.setState({errr:false});
+        }, 5000);
         }
       }else{
         this.regetQuestionaire();
         this.setState({succes:true})
         this.setState({succesMsg:'Questionaire Deleted'})
+        setTimeout(() => {
+          this.setState({succes:false});
+        }, 5000);
       }
       
     });

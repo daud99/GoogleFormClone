@@ -68,18 +68,27 @@ class Emailverify extends Component {
         this.setState({errr:false});
         this.setState({succes:true});
         this.setState({succesMsg:result.data.data.verifyUser.msg});
-        }
+        setTimeout(() => {
+          this.setState({succes:false});
+        }, 5000);
+      }
     }
     else if(result.data.errors) {
         if(result.data.errors[0].message){
         this.setState({errr:true});
         this.setState({succes:false});
         this.setState({errrMsg:result.data.errors[0].message});
-        }
+        setTimeout(() => {
+          this.setState({errr:false});
+        }, 5000);
+      }
         else{
         this.setState({errr:true});
         this.setState({succes:false});
         this.setState({errrMsg:"Something went wrong"});
+        setTimeout(() => {
+          this.setState({errr:false});
+        }, 5000);
         }
         
     }
