@@ -33,9 +33,9 @@ class ViewQuestionaire extends React.Component {
       questions:[],
     
       succesMsg:'',
-      errMsg:'',
+      errrMsg:'',
       succes:false,
-      err:false,
+      errr:false,
       selectedUser:'',
 
       isowner:false,
@@ -270,11 +270,11 @@ class ViewQuestionaire extends React.Component {
           emailO:this.inviteEmail,
         }
     });
-    if(result3.data.data.errors) {
-      if(result3.data.data.errors[0].message){
+    if(result3.data.errors) {
+      if(result3.data.errors[0].message){
       this.setState({errr:true});
       this.setState({succes:false});
-      this.setState({errrMsg:result3.data.data.errors[0].message});
+      this.setState({errrMsg:result3.data.errors[0].message});
       }
       else{
       this.setState({errr:true});
@@ -282,7 +282,7 @@ class ViewQuestionaire extends React.Component {
       this.setState({errrMsg:"Something went wrong"});
       }
       
-    }else if(result3.data.data.inviteUserToFillQuestionaire){
+    }else{
       this.setState({succes:true});
       this.setState({succesMsg:'User Invited Successfully'})
       this.setState({inviteBit:false})
@@ -299,8 +299,8 @@ class ViewQuestionaire extends React.Component {
     let notifi;
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
-    }else if(this.state.err){
-      notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
+    }else if(this.state.errr){
+      notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
     // for (let index = 0; index < this.state.questionaires.length; index++) {
     
