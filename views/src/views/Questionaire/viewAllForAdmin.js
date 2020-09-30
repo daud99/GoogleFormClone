@@ -61,11 +61,17 @@ class ViewQuestionnaireForAdmin extends React.Component {
             this.setState({errr:true});
             this.setState({succes:false});
             this.setState({errrMsg:result.data.data.errors[0].message});
-            }
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
+          }
             else{
             this.setState({errr:true});
             this.setState({succes:false});
             this.setState({errrMsg:"Something went wrong"});
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
             }
             
           }else{

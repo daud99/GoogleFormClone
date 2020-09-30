@@ -109,11 +109,17 @@ class ViewQuestionaire extends React.Component {
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:result.data.errors[0].message});
-          }
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
+        }
           else{
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:"Something went wrong"});
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
           }
           
         }else if(result.data.data.getQuestionaireByID){
@@ -204,6 +210,9 @@ class ViewQuestionaire extends React.Component {
           
           this.setState({succes:true});
           this.setState({succesMsg:'Answers submited successfully'})
+          setTimeout(() => {
+            this.setState({succes:false});
+          }, 5000);
         }
         // .then((result) => {
         //   this.setState({succes:true})
@@ -214,6 +223,9 @@ class ViewQuestionaire extends React.Component {
         window.scrollTo(0,0)
         this.setState({succes:true});
         this.setState({succesMsg:'Answers submited successfully'})
+        setTimeout(() => {
+          this.setState({succes:false});
+        }, 5000);
         // this.props.history.push('/allQuestionaires')
       }
     }else{
@@ -275,17 +287,26 @@ class ViewQuestionaire extends React.Component {
       this.setState({errr:true});
       this.setState({succes:false});
       this.setState({errrMsg:result3.data.errors[0].message});
-      }
+      setTimeout(() => {
+        this.setState({errr:false});
+      }, 5000);
+    }
       else{
       this.setState({errr:true});
       this.setState({succes:false});
       this.setState({errrMsg:"Something went wrong"});
+      setTimeout(() => {
+        this.setState({errr:false});
+      }, 5000);
       }
       
     }else{
       this.setState({succes:true});
       this.setState({succesMsg:'User Invited Successfully'})
       this.setState({inviteBit:false})
+      setTimeout(() => {
+        this.setState({succes:false});
+      }, 5000);
     }
 
   }

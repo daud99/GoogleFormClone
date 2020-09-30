@@ -119,17 +119,27 @@ class Login extends Component {
             this.setState({errr:true});
             this.setState({succes:false});
             this.setState({errrMsg:"Error logging in!"});
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
           }
         } else if(res.data.errors) {
           if(res.data.errors[0].message){
             this.setState({errr:true});
             this.setState({succes:false});
             this.setState({errrMsg:res.data.errors[0].message});
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
+  
           }
           else{
             this.setState({errr:true});
             this.setState({succes:false});
             this.setState({errrMsg:"Something went wrong"});
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
           }
           
       }
@@ -218,11 +228,17 @@ class Login extends Component {
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:"Something went wrong"});
+          setTimeout(() => {
+            this.setState({errr:false});
+          }, 5000);
         }
       } else{
         this.setState({errr:true});
         this.setState({succes:false});
         this.setState({errrMsg:"Something went wrong"});
+        setTimeout(() => {
+          this.setState({errr:false});
+        }, 5000);
       }
     });
     // axios.post('/user/googleLogin',{tokenID:response.tokenId}).then(respon=>{
@@ -262,6 +278,9 @@ class Login extends Component {
     this.setState({errr:true});
     this.setState({succes:false});
     this.setState({errrMsg:'Something went wrong'});
+    setTimeout(() => {
+      this.setState({errr:false});
+    }, 5000);
   }
   resetPasswordAllow(){
     this.setState({resetPassAllow:true})
@@ -297,13 +316,19 @@ class Login extends Component {
               this.setState({errr:true});
               this.setState({succes:false});
               this.setState({errrMsg:result.data.errors[0].message});
-              }
+              setTimeout(() => {
+                this.setState({errr:false});
+              }, 5000);
+            }
               else{
               this.setState({errr:true});
               this.setState({succes:false});
               this.setState({errrMsg:"Something went wrong"});
+              setTimeout(() => {
+                this.setState({errr:false});
+              }, 5000);
               }
-              
+
           }
           });
     }
