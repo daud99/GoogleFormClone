@@ -36,9 +36,9 @@ class CreateQuestionaire extends React.Component {
       allowQuestionAdd:false,
       
       succesMsg:'',
-      errMsg:'',
+      errrMsg:'',
       succes:false,
-      err:false,
+      errr:false,
       
     };
     this.handleQuestionaireName = this.handleQuestionaireName.bind(this);
@@ -83,6 +83,7 @@ class CreateQuestionaire extends React.Component {
       this.setState({questions:this.questionsExt});
       this.listOfQuestions=[]
       this.questionVal=' '
+      document.getElementById('questionaireQuestionqq').value=''
     }
   }
 
@@ -173,7 +174,7 @@ class CreateQuestionaire extends React.Component {
           });
         }
       }
-      
+      document.getElementById('questionaireQuestionqq').value=''
       this.questionsExt=[];
       this.listOfQuestions=[];
       this.setState({questions:[]})
@@ -189,8 +190,8 @@ class CreateQuestionaire extends React.Component {
     let listt=[]
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
-    }else if(this.state.err){
-      notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
+    }else if(this.state.errr){
+      notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
     for (let index = 0; index < this.state.questions.length; index++) {
       listt.push(<li key={index} className="list-group-item list-group-item-action list-group-item-secondary"><h6>Question:{index+1}</h6>&nbsp;&nbsp;{this.state.questions[index].titleQ}</li>)

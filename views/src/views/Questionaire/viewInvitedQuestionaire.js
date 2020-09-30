@@ -32,7 +32,7 @@ class ViewInvitedQuestionaire extends React.Component {
       },
       questionaires:[],
       succesMsg:'',
-      errMsg:'',
+      errrMsg:'',
       succes:false,
       err:false,
       viewbit:false
@@ -184,12 +184,12 @@ class ViewInvitedQuestionaire extends React.Component {
     let rows=[]
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
-    }else if(this.state.err){
-      notifi=<SnackbarContent message={'Error: '+this.state.errMsg} close color="danger"/>;
+    }else if(this.state.errr){
+      notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
     for (let index = 0; index < this.state.questionaires.length; index++) {
       rows.push(<tr key={index}>
-        <td style={{width:"10%"}}>{index}</td>
+        <td style={{width:"10%"}}>{index+1}</td>
         <td style={{width:"50%"}}>{this.state.questionaires[index].questionaire.title}</td>
         <td style={{width:"20%"}}>{this.dateGet(this.state.questionaires[index].questionaire.createdAt)}</td>
         <td style={{width:"20%"}}>
