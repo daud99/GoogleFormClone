@@ -49,7 +49,8 @@ class Login extends Component {
     };
     this.resetPasswordAllow = this.resetPasswordAllow.bind(this);
     this.resetPasswordDissAllow = this.resetPasswordDissAllow.bind(this);
-
+    this.checkTokenStatusLocal = this.checkTokenStatusLocal.bind(this);
+    this.checkTokenStatusGoogle = this.checkTokenStatusGoogle.bind(this);
     this.resetPass = this.resetPass.bind(this);
 
   }
@@ -71,6 +72,18 @@ class Login extends Component {
   }
   handlePassword1 = event => {
     this.data.password= event.target.value;
+  }
+  checkTokenStatusLocal(timer) {
+    if (localStorage.getItem("localToken")) {
+      clearInterval(timer)
+      this.props.history.push(`/l/allQuestionaires`)
+    }
+  }
+  checkTokenStatusGoogle(timerg) {
+    if (localStorage.getItem("token")) {
+      clearInterval(timerg)
+      this.props.history.push(`/l/allQuestionaires`)
+    }
   }
   // local login
   loginMethod=()=> {
@@ -111,10 +124,12 @@ class Login extends Component {
                   this.props.onTokenGet(res.data.data.login.token);
                   this.props.onUserIdGet(res.data.data.login.userId);
                   this.props.onUserTypeGet(res.data.data.login.type);
+                  
+                  var timer = setInterval(this.checkTokenStatusLocal(timer), 700);
 
-                  setTimeout(() => {
-                    this.props.history.push(`/l/allQuestionaires`)
-                  }, 700)
+                  // setTimeout(() => {
+                  //   this.props.history.push(`/l/allQuestionaires`)
+                  // }, 700)
           } else {
             this.setState({errr:true});
             this.setState({succes:false});
@@ -220,10 +235,10 @@ class Login extends Component {
           this.props.onTokenGet(res.data.data.googleLogin.token);
           this.props.onUserIdGet(res.data.data.googleLogin._id);
           this.props.onUserTypeGet(res.data.data.googleLogin.type);
-
-          setTimeout(() => {
-            this.props.history.push(`/l/allQuestionaires`)
-          }, 500);
+          var timerg = setInterval(this.checkTokenStatusGoogle(timerg), 700);
+          // setTimeout(() => {
+          //   this.props.history.push(`/l/allQuestionaires`)
+          // }, 500);
         } else{
           this.setState({errr:true});
           this.setState({succes:false});
