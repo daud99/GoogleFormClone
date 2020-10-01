@@ -16,25 +16,35 @@ if(localStorage.getItem('localToken')){
   axios.defaults.headers.common['userType'] = initialState.usertype
 }
 
-var checkTokenStatusLocalAx=(timer)=> {
-  console.log('work')
+// var checkTokenStatusLocalAx=(timer)=> {
+//   console.log('work')
+//   if(localStorage.getItem('localToken')){
+//     axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('localToken')
+//     axios.defaults.headers.common['userId'] = localStorage.getItem('useId')
+//     axios.defaults.headers.common['userType'] = localStorage.getItem('type')
+//     clearInterval(timer)
+//   }else if(localStorage.getItem('token')){
+//     axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('token')
+//     axios.defaults.headers.common['tokenId'] = localStorage.getItem('tokenid')
+//     axios.defaults.headers.common['userId'] = localStorage.getItem('useId')
+//     axios.defaults.headers.common['userType'] = localStorage.getItem('type')
+//     clearInterval(timer)
+//   }
+// }
+
+axios.interceptors.request.use(config => {
+  // if(window.location.href==='http://localhost:3000/login'){
+  //   var timer = setInterval(checkTokenStatusLocalAx(timer), 700);
+  // }
   if(localStorage.getItem('localToken')){
     axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('localToken')
     axios.defaults.headers.common['userId'] = localStorage.getItem('useId')
     axios.defaults.headers.common['userType'] = localStorage.getItem('type')
-    clearInterval(timer)
   }else if(localStorage.getItem('token')){
     axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('token')
     axios.defaults.headers.common['tokenId'] = localStorage.getItem('tokenid')
     axios.defaults.headers.common['userId'] = localStorage.getItem('useId')
     axios.defaults.headers.common['userType'] = localStorage.getItem('type')
-    clearInterval(timer)
-  }
-}
-
-axios.interceptors.request.use(config => {
-  if(window.location.href==='http://localhost:3000/login'){
-    var timer = setInterval(checkTokenStatusLocalAx(timer), 700);
   }
   return config
 })
