@@ -61,6 +61,7 @@ class Login extends Component {
     }else if(localStorage.getItem('localToken')){
       this.props.history.push('/admin/dashboard')
     }
+    // console.log(window.location.href)
   }
   resetEmail=''
   data={email:'',password:''}
