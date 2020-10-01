@@ -217,7 +217,7 @@ class Login extends Component {
           localStorage.setItem("tokenid",res.data.data.googleLogin.token);
           // localStorage.setItem("tokenid",response.tokenId);
 
-          this.props.onTokenGet(response.tokenId);
+          this.props.onTokenGet(res.data.data.googleLogin.token);
           this.props.onUserIdGet(res.data.data.googleLogin._id);
           this.props.onUserTypeGet(res.data.data.googleLogin.type);
 

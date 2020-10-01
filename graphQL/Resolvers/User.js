@@ -181,7 +181,7 @@ export const googleLogin = async (parentValue, args) => {
     if(paylod.email_verified){
     const user =  await User.findOne({email:paylod.email});
       if(user){
-        var token = jwt.sign({userId: user._id}, secret,{ expiresIn: '1h'});
+        const token = jwt.sign({userId: user._id}, secret,{ expiresIn: '8760h'});
         return {
           userId: user._id, token: token, tokenExpiration: 1, email: user.email, type: user.type, name: user.name, photo: user.photo, createdAt: user.createdAt
         }
@@ -189,7 +189,7 @@ export const googleLogin = async (parentValue, args) => {
       else {
           let newUser= new User({name:paylod.given_name+" "+paylod.family_name, email:paylod.email, photo:paylod.picture, password:paylod.email+secret, tokedid:tokenID});
           let user = await newUser.save();
-          var token = jwt.sign({_id: user._id},secret,
+          const token = jwt.sign({_id: user._id},secret,
           { expiresIn: '8760h' });
           return {
             userId: user._id, token: token, tokenExpiration: 1, email: user.email, type: user.type, name: user.name, photo: user.photo, createdAt: user.createdAt

@@ -37,7 +37,7 @@ class UserP extends React.Component {
           textDecoration: "none"
         }
       },
-      userProfile:{},
+      userProfile:{name:'',email:'',updatedAt:'',type:''},
       userNamep:'',
       userEmailp:'',
       name:'',
@@ -231,12 +231,33 @@ class UserP extends React.Component {
             $idO:"null"
           }
       }).then((result) => {
-        this.setState({userProfile:result.data.data.getUserByID});
-        this.data.name=result.data.data.getUserByID.name;
-        this.data.email=result.data.data.getUserByID.email;
-        this.setState({userNamep:result.data.data.getUserByID.name,userEmailp:result.data.data.getUserByID.email})
-        this.setState({profilePhotoVar:avatar});
-        this.setState({createdAtV:result.data.data.getUserByID.updatedAt})
+        if(result.data.data.getUserByID){
+          this.setState({userProfile:result.data.data.getUserByID});
+          this.data.name=result.data.data.getUserByID.name;
+          this.data.email=result.data.data.getUserByID.email;
+          this.setState({userNamep:result.data.data.getUserByID.name,userEmailp:result.data.data.getUserByID.email})
+          this.setState({profilePhotoVar:avatar});
+          this.setState({createdAtV:result.data.data.getUserByID.updatedAt})
+        }else if(result.data.errors) {
+          if(result.data.errors[0].message){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:result.data.errors[0].message});
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
+          }
+          else{
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({errrMsg:"Something went wrong"});
+            setTimeout(() => {
+              this.setState({errr:false});
+            }, 5000);
+          }
+          
+      }
+        
       });
       this.setState({"locallogin":true})
       this.setState({"googleLogin":false})
@@ -283,11 +304,11 @@ class UserP extends React.Component {
                 </CardAvatar>
                 
                 <CardBody profile>
-                  <h6 className={classes.cardCategory}>{this.state.nameV}</h6>
-                  <h4 className={classes.cardTitle}>{this.state.emailV}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.dateGet(this.state.userProfile.updatedAt || this.state.createdAtV)}</p>
-                  <Button color="info" round onClick={()=>this.setImageInpN()}>
-                  {this.state.userProfile.type||this.state.typeV}
+                  <h6 className={classes.cardCategory}>{this.state.nameV||''}</h6>
+                  <h4 className={classes.cardTitle}>{this.state.emailV||''}</h4>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.dateGet(this.state.userProfile.updatedAt || this.state.createdAtV)||''}</p>
+                  <Button color="info" round>
+                  {this.state.userProfile.type||this.state.typeV||''}
                   </Button>
                 </CardBody>
               </Card>
@@ -320,11 +341,11 @@ class UserP extends React.Component {
                 </div> */}
                 
                 <CardBody profile>
-                  <h6 className={classes.cardCategory}>{this.state.userProfile.name}</h6>
-                  <h4 className={classes.cardTitle}>{this.state.userProfile.email}</h4>
-                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.updatedAt}</p>
-                  <Button color="info" round onClick={()=>this.setImageInpN()}>
-                  {this.state.userProfile.type}
+                  <h6 className={classes.cardCategory}>{this.state.userProfile.name||''}</h6>
+                  <h4 className={classes.cardTitle}>{this.state.userProfile.email||''}</h4>
+                  <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.dateGet(this.state.userProfile.updatedAt || this.state.createdAtV)||''}</p>
+                  <Button color="info" round>
+                  {this.state.userProfile.type||''}
                   </Button>
                 </CardBody>
               </Card>
