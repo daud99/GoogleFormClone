@@ -65,7 +65,7 @@ const AdminNavbarLinks = (props) => {
         // }
       // });
   };
-  const logout =(response) =>{
+  const logout =() =>{
     localStorage.removeItem("token");
     localStorage.removeItem("useId");
     localStorage.removeItem("name");
@@ -91,18 +91,12 @@ const AdminNavbarLinks = (props) => {
               Logout
               </MenuItem>
   }else if(localStorage.getItem("token")){
-    logoutBut=
-    <GoogleLogout
-      icon={false}
-      tag='li'
-      // disabledStyle={{display: "none"}}
-      className="specialFetchingClass MuiButtonBase-root MuiListItem-root MuiMenuItem-root makeStyles-dropdownItem-78 MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button"
-      clientId="43580613435-jloen18vc3cg889doto8tm70ss6q1rsu.apps.googleusercontent.com"
-      buttonText='Logout'
-      onLogoutSuccess={ logout }
-      onFailure={ handleLogoutFailure }
-    >
-    </GoogleLogout>
+    logoutBut=<MenuItem
+                onClick={logout}
+                className={classes.dropdownItem}
+              >
+              Logout
+              </MenuItem>
   }
 
   return (
